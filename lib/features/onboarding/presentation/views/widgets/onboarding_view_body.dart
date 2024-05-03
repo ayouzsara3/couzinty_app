@@ -1,6 +1,8 @@
-import 'package:couzinty/core/utils/app_styles.dart';
+import 'package:couzinty/core/utils/app_router.dart';
+import 'package:couzinty/core/utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_onboarding_slider/flutter_onboarding_slider.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../../../core/utils/size_config.dart';
 import 'onboarding_page_body.dart';
@@ -13,7 +15,9 @@ class OnBoardingViewBody extends StatelessWidget {
     SizeConfig().init(context);
 
     return OnBoardingSlider(
-      onFinish: () async {},
+      onFinish: () async {
+        GoRouter.of(context).push(AppRouter.kSignUpView);
+      },
       finishButtonText: 'Commencer',
       finishButtonStyle: const FinishButtonStyle(
           backgroundColor: kMainGreen,

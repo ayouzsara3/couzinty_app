@@ -1,6 +1,8 @@
 import 'package:couzinty/core/utils/app_router.dart';
 import 'package:flutter/material.dart';
 
+import 'core/utils/app_theme.dart';
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
@@ -16,6 +18,7 @@ class Couzinty extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp.router(
       routerConfig: AppRouter.router,
+      theme: AppTheme.lightTheme,
       debugShowCheckedModeBanner: false,
     );
   }

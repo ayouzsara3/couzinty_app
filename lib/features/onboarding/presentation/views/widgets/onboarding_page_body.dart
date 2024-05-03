@@ -1,6 +1,6 @@
+import 'package:couzinty/core/utils/constants.dart';
 import 'package:flutter/material.dart';
 
-import '../../../../../core/utils/app_styles.dart';
 import '../../../../../core/utils/size_config.dart';
 
 class OnboardingPageBody extends StatelessWidget {

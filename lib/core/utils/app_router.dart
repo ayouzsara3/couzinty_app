@@ -1,8 +1,8 @@
+import 'package:couzinty/features/auth/presentation/views/signup_view.dart';
 import 'package:couzinty/features/onboarding/presentation/views/onboarding_view.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../features/auth/presentation/views/signup_view.dart';
 import '../../features/splash/presentation/views/splash_view.dart';
 
 abstract class AppRouter {
@@ -21,7 +21,7 @@ abstract class AppRouter {
             key: state.pageKey,
             child: const OnboardingView(),
             fullscreenDialog: true,
-            transitionDuration: const Duration(seconds: 2),
+            transitionDuration: const Duration(seconds: 1),
             transitionsBuilder:
                 (context, animation, secondaryAnimation, child) {
               // Change the opacity of the screen using a Curve based on the the animation's
@@ -41,8 +41,7 @@ abstract class AppRouter {
           return CustomTransitionPage(
             key: state.pageKey,
             child: const SignUpView(),
-            fullscreenDialog: true,
-            transitionDuration: const Duration(seconds: 2),
+            transitionDuration: const Duration(seconds: 1),
             transitionsBuilder:
                 (context, animation, secondaryAnimation, child) {
               // Change the opacity of the screen using a Curve based on the the animation's

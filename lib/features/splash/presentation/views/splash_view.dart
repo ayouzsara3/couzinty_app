@@ -1,6 +1,5 @@
-import 'package:couzinty/core/utils/app_styles.dart';
+import 'package:couzinty/core/utils/constants.dart';
 import 'package:flutter/material.dart';
-
 import 'widgets/splash_view_body.dart';
 
 class SplashView extends StatelessWidget {
