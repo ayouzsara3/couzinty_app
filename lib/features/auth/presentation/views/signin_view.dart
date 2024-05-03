@@ -1,3 +1,4 @@
+import 'package:couzinty/features/auth/presentation/views/widgets/signin_view_body.dart';
 import 'package:flutter/material.dart';
 
 class SignInView extends StatelessWidget {
@@ -5,6 +6,6 @@ class SignInView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return const SignInViewBody();
   }
 }

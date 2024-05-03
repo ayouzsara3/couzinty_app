@@ -1,3 +1,4 @@
+import 'package:couzinty/features/auth/presentation/views/signin_view.dart';
 import 'package:couzinty/features/auth/presentation/views/signup_view.dart';
 import 'package:couzinty/features/onboarding/presentation/views/onboarding_view.dart';
 import 'package:flutter/material.dart';
@@ -8,6 +9,8 @@ import '../../features/splash/presentation/views/splash_view.dart';
 abstract class AppRouter {
   static const kOnboardingView = '/onboardingview';
   static const kSignUpView = '/signupview';
+  static const kSignInView = '/signinview';
+
   static final router = GoRouter(
     routes: [
       GoRoute(
@@ -41,6 +44,26 @@ abstract class AppRouter {
           return CustomTransitionPage(
             key: state.pageKey,
             child: const SignUpView(),
+            transitionDuration: const Duration(seconds: 1),
+            transitionsBuilder:
+                (context, animation, secondaryAnimation, child) {
+              // Change the opacity of the screen using a Curve based on the the animation's
+              // value
+              return FadeTransition(
+                opacity:
+                    CurveTween(curve: Curves.easeInOutCirc).animate(animation),
+                child: child,
+              );
+            },
+          );
+        },
+      ),
+      GoRoute(
+        path: kSignInView,
+        pageBuilder: (context, state) {
+          return CustomTransitionPage(
+            key: state.pageKey,
+            child: const SignInView(),
             transitionDuration: const Duration(seconds: 1),
             transitionsBuilder:
                 (context, animation, secondaryAnimation, child) {

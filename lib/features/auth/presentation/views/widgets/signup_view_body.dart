@@ -1,3 +1,4 @@
+import 'package:couzinty/core/utils/app_router.dart';
 import 'package:couzinty/core/utils/app_styles.dart';
 import 'package:couzinty/core/utils/constants.dart';
 import 'package:couzinty/core/utils/size_config.dart';
@@ -5,6 +6,7 @@ import 'package:couzinty/core/utils/string_util.dart';
 import 'package:couzinty/core/utils/widgets/custom_button.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class SignUpViewBody extends StatefulWidget {
   const SignUpViewBody({super.key});
@@ -47,7 +49,7 @@ class _SignUpViewBodyState extends State<SignUpViewBody> {
           children: [
             SizedBox(height: SizeConfig.screenHeight! / 8),
             Text(
-              'Commencer',
+              'Commencer!',
               style: AppStyles.styleBold22(context),
             ),
             Padding(
@@ -192,18 +194,24 @@ class _SignUpViewBodyState extends State<SignUpViewBody> {
                   ),
                   SizedBox(height: SizeConfig.defaultSize! * 3),
                   InkWell(
-                    onTap: () {},
-                    child: RichText(
-                      text: TextSpan(
-                        text: 'Vous avez déjà un compte? ',
-                        style: AppStyles.styleBold15(context),
-                        children: <TextSpan>[
-                          TextSpan(
-                              text: ' Se connecter',
-                              style: AppStyles.styleMedium15(context).copyWith(
-                                  color: kMainGreen,
-                                  fontWeight: FontWeight.w800))
-                        ],
+                    onTap: () {
+                      GoRouter.of(context).push(AppRouter.kSignInView);
+                    },
+                    child: FittedBox(
+                      fit: BoxFit.scaleDown,
+                      child: RichText(
+                        text: TextSpan(
+                          text: 'Vous avez déjà un compte? ',
+                          style: AppStyles.styleBold15(context),
+                          children: <TextSpan>[
+                            TextSpan(
+                                text: ' Se connecter',
+                                style: AppStyles.styleMedium15(context)
+                                    .copyWith(
+                                        color: kMainGreen,
+                                        fontWeight: FontWeight.w800))
+                          ],
+                        ),
                       ),
                     ),
                   ),

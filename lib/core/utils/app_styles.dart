@@ -40,7 +40,7 @@ abstract class AppStyles {
 
   static TextStyle styleBold22(context) {
     return const TextStyle(
-      color: kDarkBlue,
+      color: kDeepBlue,
       fontSize: 22,
       fontFamily: kInter,
       fontWeight: FontWeight.w900,
