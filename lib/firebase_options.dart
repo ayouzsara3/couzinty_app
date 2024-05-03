@@ -59,5 +59,4 @@ class DefaultFirebaseOptions {
     projectId: 'couzinty-4900c',
     storageBucket: 'couzinty-4900c.appspot.com',
   );
-
 }

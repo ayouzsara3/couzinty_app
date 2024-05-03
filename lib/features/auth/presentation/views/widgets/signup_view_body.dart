@@ -184,6 +184,8 @@ class _SignUpViewBodyState extends State<SignUpViewBody> {
                   CustomButton(
                     onTap: () {
                       _focusNode.unfocus();
+                      GoRouter.of(context)
+                          .pushReplacement(AppRouter.kUserNavigation);
                     },
                     text: 'S\'inscrire',
                     color: Colors.white,

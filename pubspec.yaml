@@ -35,7 +35,6 @@ dependencies:
   flutter_onboarding_slider: ^1.0.11
   flutter_svg: ^2.0.10+1
   go_router: ^14.0.2
-  page_transition: ^2.1.0
   shared_preferences: ^2.2.3
 
 dev_dependencies:

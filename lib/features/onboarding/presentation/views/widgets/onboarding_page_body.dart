@@ -20,7 +20,7 @@ class OnboardingPageBody extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
           SizedBox(
-            height: SizeConfig.screenHeight! - 350,
+            height: SizeConfig.screenHeight! - 330,
           ),
           Text(
             title,

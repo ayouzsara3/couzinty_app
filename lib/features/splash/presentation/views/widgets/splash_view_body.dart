@@ -18,7 +18,7 @@ class _SplashViewBodyState extends State<SplashViewBody> {
 
   void navigateToNextPage(context) {
     Future.delayed(const Duration(seconds: 2), () {
-      GoRouter.of(context).push(AppRouter.kOnboardingView);
+      GoRouter.of(context).pushReplacement(AppRouter.kOnboardingView);
     });
   }
 
