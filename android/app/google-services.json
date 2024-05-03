@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "165076839429",
+    "project_id": "couzinty-4900c",
+    "storage_bucket": "couzinty-4900c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:165076839429:android:6e7169b9d895099200c06c",
+        "android_client_info": {
+          "package_name": "com.example.couzinty"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAl3KU4cRywABeMxLrYTANch1P-qdY2wyo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,4 +1,3 @@
-import 'package:couzinty/core/utils/app_styles.dart';
 import 'package:flutter/material.dart';
 
 import 'constants.dart';
