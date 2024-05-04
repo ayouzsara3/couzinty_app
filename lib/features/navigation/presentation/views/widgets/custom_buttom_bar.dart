@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 
 class CustomButtomBar extends StatefulWidget {
   const CustomButtomBar(
-      {super.key, required this.pageController, required this.currentTab});
+      {super.key, required this.currentTab, required this.pageController});
 
-  final PageController pageController;
   final int currentTab;
+  final PageController pageController;
 
   @override
   State<CustomButtomBar> createState() => _CustomButtomBarState();
@@ -22,7 +22,6 @@ class _CustomButtomBarState extends State<CustomButtomBar> {
   }
 
   @override
-  @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Container(
@@ -32,12 +31,12 @@ class _CustomButtomBarState extends State<CustomButtomBar> {
           children: <Widget>[
             NavbarItem(
                 index: 0,
-                iconPath: 'assets/images/category.svg',
+                iconPath: 'assets/images/list.svg',
                 currentTab: widget.currentTab,
                 onTap: navigateToPage),
             NavbarItem(
                 index: 1,
-                iconPath: 'assets/images/list.svg',
+                iconPath: 'assets/images/fav.svg',
                 currentTab: widget.currentTab,
                 onTap: navigateToPage),
             NavbarItem(
@@ -47,7 +46,7 @@ class _CustomButtomBarState extends State<CustomButtomBar> {
                 onTap: navigateToPage),
             NavbarItem(
                 index: 3,
-                iconPath: 'assets/images/fav.svg',
+                iconPath: 'assets/images/category.svg',
                 currentTab: widget.currentTab,
                 onTap: navigateToPage),
             NavbarItem(

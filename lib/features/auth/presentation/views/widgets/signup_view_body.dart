@@ -6,6 +6,7 @@ import 'package:couzinty/core/utils/string_util.dart';
 import 'package:couzinty/core/utils/widgets/custom_button.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 
 class SignUpViewBody extends StatefulWidget {
@@ -47,19 +48,9 @@ class _SignUpViewBodyState extends State<SignUpViewBody> {
       child: SingleChildScrollView(
         child: Column(
           children: [
-            SizedBox(height: SizeConfig.screenHeight! / 8),
-            Text(
-              'Commencer!',
-              style: AppStyles.styleBold22(context),
+            SvgPicture.asset(
+              'assets/images/logo.svg',
             ),
-            Padding(
-              padding: const EdgeInsets.only(top: 5.0),
-              child: Text(
-                'Veuillez entrer vos informations ici',
-                style: AppStyles.styleMedium15(context),
-              ),
-            ),
-            SizedBox(height: SizeConfig.defaultSize! * 3),
             Form(
               key: _formKey,
               child: Column(

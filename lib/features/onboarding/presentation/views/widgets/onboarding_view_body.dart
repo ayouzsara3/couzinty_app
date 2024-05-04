@@ -15,7 +15,7 @@ class OnBoardingViewBody extends StatelessWidget {
     SizeConfig().init(context);
 
     return OnBoardingSlider(
-      onFinish: () async {
+      onFinish: () {
         GoRouter.of(context).pushReplacement(AppRouter.kSignUpView);
       },
       finishButtonText: 'Commencer',

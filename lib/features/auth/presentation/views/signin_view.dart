@@ -6,6 +6,19 @@ class SignInView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const SignInViewBody();
+    return Scaffold(
+      body: Stack(children: [
+        Opacity(
+          opacity: 0.3,
+          child: Image.asset(
+            'assets/images/login_background.jpg',
+            height: double.infinity,
+            width: double.infinity,
+            fit: BoxFit.fill,
+          ),
+        ),
+        const SignInViewBody(),
+      ]),
+    );
   }
 }

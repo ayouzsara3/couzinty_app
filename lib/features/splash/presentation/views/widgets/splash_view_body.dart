@@ -1,5 +1,7 @@
 import 'package:couzinty/core/utils/app_router.dart';
+import 'package:couzinty/core/utils/size_config.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:go_router/go_router.dart';
 
 class SplashViewBody extends StatefulWidget {
@@ -24,19 +26,22 @@ class _SplashViewBodyState extends State<SplashViewBody> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
+    SizeConfig().init(context);
+    return Stack(
       children: [
-        Image.asset(
-          'assets/images/background.png',
-          fit: BoxFit.contain,
+        Opacity(
+          opacity: 0.1,
+          child: Image.asset(
+            'assets/images/background_image.png',
+            height: double.infinity,
+            width: double.infinity,
+            fit: BoxFit.fill,
+          ),
         ),
         Image.asset(
           'assets/images/logo-2.png',
-          fit: BoxFit.contain,
+          height: 500,
         ),
-        const CircularProgressIndicator(
-          color: Colors.white,
-        )
       ],
     );
   }
