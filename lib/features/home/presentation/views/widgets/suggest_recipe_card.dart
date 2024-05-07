@@ -3,8 +3,8 @@ import 'package:couzinty/core/utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
-class RecipeCard extends StatelessWidget {
-  const RecipeCard({super.key});
+class SuggestRecipeCard extends StatelessWidget {
+  const SuggestRecipeCard({super.key});
 
   @override
   Widget build(BuildContext context) {

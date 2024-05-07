@@ -27,10 +27,10 @@ class _UserNavigatioBodyState extends State<UserNavigatioBody> {
   }
 
   final List<Widget> screens = [
-    const CategoriesView(),
     const ShoppingListView(),
-    const HomeView(),
     const FavoritesView(),
+    const HomeView(),
+    const CategoriesView(),
     const ProfileView()
   ];
 

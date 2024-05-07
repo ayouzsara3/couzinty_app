@@ -68,6 +68,9 @@ class _SignUpViewBodyState extends State<SignUpViewBody> {
                       if (value.trim().length < 4) {
                         return 'Le nom d\'utilisateur doit comporter au moins 4 caractères';
                       }
+                      if (value.trim().length > 10) {
+                        return 'Le nom d\'utilisateur doit comporter au maximum 10 caractères';
+                      }
                       return null;
                     },
                     decoration: const InputDecoration(

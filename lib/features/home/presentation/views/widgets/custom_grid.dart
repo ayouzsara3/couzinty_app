@@ -1,4 +1,4 @@
-import 'package:couzinty/features/home/presentation/views/widgets/recipe_card.dart';
+import 'package:couzinty/features/home/presentation/views/widgets/suggest_recipe_card.dart';
 import 'package:flutter/material.dart';
 
 class CustomGrid extends StatelessWidget {
@@ -16,7 +16,7 @@ class CustomGrid extends StatelessWidget {
       ),
       itemCount: 4,
       itemBuilder: (context, index) {
-        return const RecipeCard();
+        return const SuggestRecipeCard();
       },
     );
   }
