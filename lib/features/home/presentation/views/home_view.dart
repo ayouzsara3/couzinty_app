@@ -1,10 +1,10 @@
 import 'package:couzinty/core/utils/app_styles.dart';
 import 'package:couzinty/core/utils/size_config.dart';
-import 'package:couzinty/features/home/presentation/views/widgets/custom_search_field.dart';
-import 'package:couzinty/features/home/presentation/views/widgets/custom_slider.dart';
+import 'package:couzinty/features/home/presentation/views/widgets/custom_text_form_field.dart';
+import 'package:couzinty/features/home/presentation/views/widgets/home_custom_slider.dart';
 import 'package:couzinty/features/home/presentation/views/widgets/custom_grid.dart';
+import 'package:couzinty/features/search/presentation/views/search_view.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
 class HomeView extends StatelessWidget {
   const HomeView({super.key});
@@ -36,9 +36,26 @@ class HomeView extends StatelessWidget {
                               .copyWith(color: Colors.black87)),
                     ),
                     SizedBox(height: SizeConfig.defaultSize! * 3),
-                    const CustomSlider(),
+                    const HomeCustomSlider(),
                     SizedBox(height: SizeConfig.defaultSize! * 3),
-                    const CustomSearchField(),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 10),
+                      child: InkWell(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const SearchScreen()),
+                          );
+                        },
+                        child: CustomTextFormField(
+                          hint: "Trouver une recette",
+                          prefixIcon: Icons.search,
+                          filled: true,
+                          enabled: false,
+                        ),
+                      ),
+                    ),
                     SizedBox(height: SizeConfig.defaultSize! * 3),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 10),

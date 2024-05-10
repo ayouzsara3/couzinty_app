@@ -2,8 +2,8 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:couzinty/core/utils/size_config.dart';
 import 'package:flutter/material.dart';
 
-class CustomSlider extends StatelessWidget {
-  const CustomSlider({
+class HomeCustomSlider extends StatelessWidget {
+  const HomeCustomSlider({
     super.key,
   });
 

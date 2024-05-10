@@ -3,6 +3,7 @@ import 'package:couzinty/features/auth/presentation/views/signin_view.dart';
 import 'package:couzinty/features/auth/presentation/views/signup_view.dart';
 import 'package:couzinty/features/navigation/presentation/views/user_navigation.dart';
 import 'package:couzinty/features/onboarding/presentation/views/onboarding_view.dart';
+import 'package:couzinty/features/upload/presentation/views/update_view.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../features/splash/presentation/views/splash_view.dart';
@@ -12,6 +13,7 @@ abstract class AppRouter {
   static const kSignUpView = '/signupview';
   static const kSignInView = '/signinview';
   static const kUserNavigation = '/usernavigation';
+  static const kUploadView = '/uploadview';
 
   static final router = GoRouter(
     routes: [
@@ -41,6 +43,12 @@ abstract class AppRouter {
         path: kUserNavigation,
         pageBuilder: (context, state) {
           return customFadeTransition(state, const UserNavigation());
+        },
+      ),
+      GoRoute(
+        path: kUploadView,
+        pageBuilder: (context, state) {
+          return customFadeTransition(state, const UploadView());
         },
       ),
     ],

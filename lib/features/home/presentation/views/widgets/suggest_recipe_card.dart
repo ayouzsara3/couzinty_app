@@ -15,7 +15,7 @@ class SuggestRecipeCard extends StatelessWidget {
           height: 101,
           decoration: ShapeDecoration(
             image: const DecorationImage(
-              image: NetworkImage("https://via.placeholder.com/151x151"),
+              image: AssetImage("assets/images/burger.jpg"),
               fit: BoxFit.fill,
             ),
             shape: RoundedRectangleBorder(
