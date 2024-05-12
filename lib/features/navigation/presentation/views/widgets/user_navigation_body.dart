@@ -3,7 +3,6 @@ import 'package:couzinty/core/utils/constants.dart';
 import 'package:couzinty/features/categories/presentation/views/categories_view.dart';
 import 'package:couzinty/features/favorites/presentation/views/favorites_view.dart';
 import 'package:couzinty/features/home/presentation/views/home_view.dart';
-import 'package:couzinty/features/navigation/presentation/views/widgets/custom_app_bar.dart';
 import 'package:couzinty/features/navigation/presentation/views/widgets/custom_buttom_bar.dart';
 import 'package:couzinty/features/profile/presentation/views/profile_view.dart';
 import 'package:couzinty/features/shopping_list/presentation/views/shopping_list_view.dart';

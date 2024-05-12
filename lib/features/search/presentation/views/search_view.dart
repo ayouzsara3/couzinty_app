@@ -1,7 +1,6 @@
 import 'package:couzinty/core/utils/app_router.dart';
 import 'package:couzinty/core/utils/constants.dart';
 import 'package:couzinty/features/home/presentation/views/widgets/custom_text_form_field.dart';
-import 'package:couzinty/features/navigation/presentation/views/user_navigation.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 

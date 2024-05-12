@@ -21,7 +21,7 @@ class _AddIngredientState extends State<AddIngredient> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            "Ingrediant",
+            "Ingrédient",
             style: AppStyles.styleBold22(context),
           ),
           const SizedBox(
@@ -53,7 +53,7 @@ class _AddIngredientState extends State<AddIngredient> {
           padding: const EdgeInsets.symmetric(vertical: 12),
           child: UploadCustomTextFormField(
             radius: 30,
-            hint: "Enter Ingrerdiant",
+            hint: "Entrez l'ingrédient",
             icon: Icons.drag_indicator,
           ),
         ));
@@ -82,7 +82,7 @@ class _AddIngredientState extends State<AddIngredient> {
                   color: kDeepBlue,
                 ),
                 Text(
-                  "Ingrediant",
+                  "Ingrédient",
                   style: TextStyle(
                       fontSize: 15,
                       color: kMainGreen,

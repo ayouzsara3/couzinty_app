@@ -50,7 +50,7 @@ class _CustomDurationSliderState extends State<CustomDurationSlider> {
               ),
             ),
             Slider(
-                divisions: 4,
+                divisions: 8,
                 activeColor: kMainGreen,
                 thumbColor: kMainGreen,
                 max: 50,
