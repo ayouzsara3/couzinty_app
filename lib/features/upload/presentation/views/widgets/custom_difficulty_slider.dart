@@ -3,7 +3,9 @@ import 'package:couzinty/core/utils/constants.dart';
 import 'package:flutter/material.dart';
 
 class CustomDifficultySlider extends StatefulWidget {
-  const CustomDifficultySlider({super.key});
+  const CustomDifficultySlider({super.key, required this.onSave});
+
+  final Function onSave;
 
   @override
   State<CustomDifficultySlider> createState() => _CustomDifficultySliderState();
@@ -12,13 +14,19 @@ class CustomDifficultySlider extends StatefulWidget {
 class _CustomDifficultySliderState extends State<CustomDifficultySlider> {
   double slider = 2;
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Column(
       children: [
         Row(
           children: [
             Text("Difficulté de cuisson",
-                style: AppStyles.styleBold22(context)),
+                style: AppStyles.styleBold17(context)),
           ],
         ),
         const SizedBox(
@@ -33,17 +41,17 @@ class _CustomDifficultySliderState extends State<CustomDifficultySlider> {
                 children: [
                   Text(
                     "Facile",
-                    style: AppStyles.styleBold17(context)
+                    style: AppStyles.styleBold15(context)
                         .copyWith(color: kMainGreen),
                   ),
                   Text(
                     "Moyen",
-                    style: AppStyles.styleBold17(context)
+                    style: AppStyles.styleBold15(context)
                         .copyWith(color: kMainGreen),
                   ),
                   Text(
                     "Difficile",
-                    style: AppStyles.styleBold17(context)
+                    style: AppStyles.styleBold15(context)
                         .copyWith(color: kMainGreen),
                   ),
                 ],
@@ -60,6 +68,19 @@ class _CustomDifficultySliderState extends State<CustomDifficultySlider> {
                   setState(() {
                     slider = value;
                   });
+                  switch (slider) {
+                    case 1:
+                      widget.onSave('Facile');
+                      break;
+                    case 2:
+                      widget.onSave('Moyen');
+                      break;
+                    case 3:
+                      widget.onSave('Difficile');
+                      break;
+                    default:
+                      widget.onSave('Moyen');
+                  }
                 })
           ],
         )

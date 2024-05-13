@@ -35,7 +35,7 @@ dependencies:
   cupertino_icons: ^1.0.6
   dotted_border: ^2.1.0
   firebase_auth: ^4.19.5
-  firebase_core: ^2.30.1
+  firebase_core: ^2.31.0
   firebase_storage: ^11.7.5
   flutter:
     sdk: flutter
@@ -44,6 +44,7 @@ dependencies:
   flutter_rating_bar: ^4.0.1
   flutter_spinner_item_selector: ^1.0.0
   flutter_svg: ^2.0.10+1
+  get_it: ^7.7.0
   go_router: ^14.0.2
   image_picker: ^1.1.1
   shared_preferences: ^2.2.3

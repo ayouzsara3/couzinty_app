@@ -4,14 +4,18 @@ import 'package:couzinty/features/upload/presentation/views/widgets/upload_custo
 import 'package:flutter/material.dart';
 
 class AddSteps extends StatefulWidget {
-  const AddSteps({super.key});
+  const AddSteps({super.key, required this.onSave});
+
+  final Function onSave;
 
   @override
   State<AddSteps> createState() => _AddStepsState();
 }
 
 class _AddStepsState extends State<AddSteps> {
-  List steps = [1];
+  List stepsWidgets = [1];
+
+  List<String> steps = [];
 
   @override
   Widget build(BuildContext context) {
@@ -23,13 +27,13 @@ class _AddStepsState extends State<AddSteps> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                "Steps",
-                style: AppStyles.styleBold22(context),
+                "Instructions",
+                style: AppStyles.styleBold17(context),
               ),
               IconButton(
                   onPressed: () {
                     setState(() {
-                      steps.add(step(1));
+                      stepsWidgets.add(step(1));
                     });
                   },
                   icon: const Icon(
@@ -44,7 +48,7 @@ class _AddStepsState extends State<AddSteps> {
           ListView.builder(
             physics: const NeverScrollableScrollPhysics(),
             shrinkWrap: true,
-            itemCount: steps.length,
+            itemCount: stepsWidgets.length,
             itemBuilder: (context, index) => step(index),
           ),
         ],
@@ -54,13 +58,13 @@ class _AddStepsState extends State<AddSteps> {
 
   step(int index) {
     return Dismissible(
-      direction: steps.length > 1
+      direction: stepsWidgets.length > 1
           ? DismissDirection.endToStart
           : DismissDirection.none,
       key: GlobalKey(),
-      onDismissed: (d) {
+      onDismissed: (direction) {
         setState(() {
-          steps.removeAt(index);
+          stepsWidgets.removeAt(index);
         });
       },
       child: Container(
@@ -68,9 +72,13 @@ class _AddStepsState extends State<AddSteps> {
         child: Stack(
           children: [
             UploadCustomTextFormField(
-              hint: "Tell a little about your food",
+              hint: "Parlez un peu de votre recette",
               icon: Icons.drag_indicator,
               maxLines: 4,
+              onSave: (value) {
+                steps.add(value);
+                widget.onSave(steps);
+              },
             ),
             Align(
               alignment: Alignment.topLeft,

@@ -1,15 +1,26 @@
+import 'dart:io';
+
+import 'package:couzinty/core/utils/app_router.dart';
 import 'package:couzinty/core/utils/app_styles.dart';
 import 'package:couzinty/core/utils/constants.dart';
+import 'package:couzinty/core/utils/size_config.dart';
 import 'package:couzinty/core/utils/widgets/custom_button.dart';
+import 'package:couzinty/core/utils/widgets/custom_loading_indicator.dart';
+import 'package:couzinty/features/upload/presentation/viewmodel/upload_cubit/upload_cubit.dart';
+import 'package:couzinty/features/upload/presentation/viewmodel/upload_cubit/upload_state.dart';
+import 'package:couzinty/features/upload/presentation/views/functions/show_pop_up.dart';
 import 'package:couzinty/features/upload/presentation/views/widgets/add_ingredient.dart';
 import 'package:couzinty/features/upload/presentation/views/widgets/add_photo.dart';
+import 'package:couzinty/features/upload/presentation/views/widgets/add_rating.dart';
 import 'package:couzinty/features/upload/presentation/views/widgets/add_steps.dart';
+import 'package:couzinty/features/upload/presentation/views/widgets/custom_category_dropdown.dart';
 import 'package:couzinty/features/upload/presentation/views/widgets/custom_difficulty_slider.dart';
 import 'package:couzinty/features/upload/presentation/views/widgets/custom_duration_slider.dart';
 import 'package:couzinty/features/upload/presentation/views/widgets/upload_custom_text_form_field.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinner_item_selector/flutter_spinner_item_selector.dart';
+import 'package:go_router/go_router.dart';
 
 class UploadViewBody extends StatefulWidget {
   const UploadViewBody({super.key});
@@ -19,116 +30,269 @@ class UploadViewBody extends StatefulWidget {
 }
 
 class _UploadViewBodyState extends State<UploadViewBody> {
-  Text? selectedItem;
+  String? recipeName;
+  File? recipeImage;
+  String? selectedCategory;
+  String selectedDifficulty = 'Moyen';
+  double selectedCookingTime = 30;
+  List<String> ingredients = [];
+  List<String> instructions = [];
+  double? selectedRate = 3;
+  Text personsNumber = const Text('1');
+
+  final _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(20),
-      child: SingleChildScrollView(
-        child: Column(
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    return Stack(
+      children: [
+        Padding(
+          padding: const EdgeInsets.all(20),
+          child: SingleChildScrollView(
+            child: Column(
               children: [
-                TextButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  child: Text("Annuler",
-                      style: AppStyles.styleBold17(context)
-                          .copyWith(color: Colors.redAccent)),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    TextButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      child: Text("Annuler",
+                          style: AppStyles.styleBold17(context)
+                              .copyWith(color: Colors.redAccent)),
+                    ),
+                  ],
                 ),
+                const SizedBox(
+                  height: 15,
+                ),
+                Form(
+                  key: _formKey,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      AddPhoto(
+                        onPickImage: (value) {
+                          recipeImage = value;
+                        },
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      Text(
+                        "Nom de la recette",
+                        style: AppStyles.styleBold17(context),
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      UploadCustomTextFormField(
+                        hint: "Entrez le nom de la recette",
+                        radius: 30,
+                        onSave: (value) {
+                          setState(() {
+                            recipeName = value;
+                          });
+                        },
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      Text(
+                        "Categorie",
+                        style: AppStyles.styleBold17(context),
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      CustomCategoryDropDown(onSave: (value) {
+                        selectedCategory = value;
+                      }),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      Text(
+                        "Nombre des personnes ${personsNumber.data ?? '..'}",
+                        style: AppStyles.styleBold17(context),
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          FilledButton(
+                              style: const ButtonStyle(
+                                  backgroundColor:
+                                      MaterialStatePropertyAll(kMainGreen)),
+                              onPressed: _showItemSelector,
+                              child: const Text(
+                                'Choisissez le Nombre',
+                              )),
+                        ],
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      CustomDifficultySlider(
+                        onSave: (value) {
+                          selectedDifficulty = value;
+                        },
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      CustomDurationSlider(
+                        onSave: (value) {
+                          selectedCookingTime = value;
+                        },
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      AddIngredient(
+                        onSave: (value) {
+                          ingredients = value;
+                        },
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      AddSteps(
+                        onSave: (value) {
+                          instructions = value;
+                        },
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      Text(
+                        "Rate",
+                        style: AppStyles.styleBold17(context),
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      AddRating(
+                        onSave: (value) {
+                          selectedRate = value;
+                        },
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      CustomButton(
+                        onTap: () async {
+                          final isValid = _formKey.currentState!.validate();
+                          if (!isValid || recipeImage == null) {
+                            return;
+                          }
+
+                          instructions.clear();
+                          ingredients.clear();
+
+                          _formKey.currentState!.save();
+
+                          await context.read<UploadCubit>().uploadRecipe(
+                              name: recipeName,
+                              image: recipeImage,
+                              category: selectedCategory,
+                              cookingTime: selectedCookingTime,
+                              difficulty: selectedDifficulty,
+                              ingredients: ingredients,
+                              instructions: instructions,
+                              personsNumber: int.tryParse(personsNumber.data!),
+                              rate: selectedRate);
+                        },
+                        text: "Ajouter",
+                        fontSize: 18,
+                        color: Colors.white,
+                        backgroundColor: kMainGreen,
+                        borderRadius: 32,
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                    ],
+                  ),
+                )
               ],
             ),
-            const SizedBox(
-              height: 15,
-            ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const AddPhoto(),
-                const SizedBox(
-                  height: 20,
-                ),
-                Text(
-                  "Nom de la recette",
-                  style: AppStyles.styleBold22(context),
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                UploadCustomTextFormField(
-                  hint: "Entrez le nom de la recette",
-                  radius: 30,
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                Text(
-                  "Nombre des personnes ${selectedItem?.data ?? '..'}",
-                  style: AppStyles.styleBold22(context),
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                FilledButton(
-                    onPressed: _showItemSelector,
-                    child: const Text('Select an Item')),
-                const SizedBox(
-                  height: 20,
-                ),
-                const CustomDifficultySlider(),
-                const SizedBox(
-                  height: 20,
-                ),
-                const CustomDurationSlider(),
-                const SizedBox(
-                  height: 20,
-                ),
-                const AddIngredient(),
-                const SizedBox(
-                  height: 20,
-                ),
-                const AddSteps(),
-                const SizedBox(
-                  height: 20,
-                ),
-                CustomButton(
-                  onTap: () {},
-                  text: "Ajouter",
-                  fontSize: 18,
-                  color: Colors.white,
-                  backgroundColor: kMainGreen,
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-              ],
-            )
-          ],
+          ),
         ),
-      ),
+        BlocBuilder<UploadCubit, UploadState>(
+          builder: (context, state) {
+            if (state is UploadLoading) {
+              return Container(
+                height: SizeConfig.screenHeight,
+                width: SizeConfig.screenWidth,
+                color: Colors.black.withOpacity(0.2), // Add some blur effect
+                child: const Center(
+                  child: CustomLoadingIncicator(), // Loading indicator
+                ),
+              );
+            }
+            if ((state is UploadSuccess)) {
+              Future.delayed(Duration.zero, () {
+                // Show dialog when upload is successful
+                showPopUp(context);
+              });
+            } else {
+              return const SizedBox.shrink();
+            }
+            return const SizedBox.shrink();
+          },
+        ),
+      ],
     );
   }
 
   void _showItemSelector() async {
     final selected = await showSpinnerItemSelector<Text>(
       context,
-      items: const [
-        Text('1'),
-        Text('2'),
-        Text('3'),
-        Text('4'),
-        Text('5'),
-        Text('6'),
-        Text('7'),
-        Text('8'),
-        Text('9'),
-        Text('10'),
+      items: [
+        Text(
+          '1',
+          style: AppStyles.styleBold17(context).copyWith(color: Colors.white),
+        ),
+        Text(
+          '2',
+          style: AppStyles.styleBold17(context).copyWith(color: Colors.white),
+        ),
+        Text(
+          '3',
+          style: AppStyles.styleBold17(context).copyWith(color: Colors.white),
+        ),
+        Text(
+          '4',
+          style: AppStyles.styleBold17(context).copyWith(color: Colors.white),
+        ),
+        Text(
+          '5',
+          style: AppStyles.styleBold17(context).copyWith(color: Colors.white),
+        ),
+        Text(
+          '6',
+          style: AppStyles.styleBold17(context).copyWith(color: Colors.white),
+        ),
+        Text(
+          '7',
+          style: AppStyles.styleBold17(context).copyWith(color: Colors.white),
+        ),
+        Text(
+          '8',
+          style: AppStyles.styleBold17(context).copyWith(color: Colors.white),
+        ),
+        Text(
+          '9',
+          style: AppStyles.styleBold17(context).copyWith(color: Colors.white),
+        ),
+        Text(
+          '10',
+          style: AppStyles.styleBold17(context).copyWith(color: Colors.white),
+        ),
       ],
-      buttonStyle: const ButtonStyle(
-          textStyle: MaterialStatePropertyAll(TextStyle(color: kDarkBlue))),
       title: 'Nombre des personnes',
       spinnerBgColor: kMainGreen,
       selectedItemToWidget: (item) => item,
@@ -143,7 +307,7 @@ class _UploadViewBodyState extends State<UploadViewBody> {
 
     if (selected != null) {
       setState(() {
-        selectedItem = selected;
+        personsNumber = selected;
       });
     }
   }

@@ -1,7 +1,6 @@
 import 'package:couzinty/core/utils/app_router.dart';
 import 'package:couzinty/core/utils/app_styles.dart';
 import 'package:couzinty/core/utils/constants.dart';
-import 'package:couzinty/core/utils/functions/custom_buttom_scaffold.dart';
 import 'package:couzinty/core/utils/size_config.dart';
 import 'package:couzinty/core/utils/string_util.dart';
 import 'package:couzinty/core/utils/widgets/custom_button.dart';
@@ -9,12 +8,11 @@ import 'package:couzinty/core/utils/widgets/custom_loading_indicator.dart';
 import 'package:couzinty/features/auth/presentation/viewmodel/signup/signup_cubit.dart';
 import 'package:couzinty/features/auth/presentation/viewmodel/signup/signup_state.dart';
 import 'package:couzinty/features/auth/presentation/views/signin_view.dart';
-import 'package:couzinty/features/auth/presentation/views/signup_view.dart';
-import 'package:couzinty/features/navigation/presentation/views/user_navigation.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:go_router/go_router.dart';
 
 class SignUpViewBody extends StatefulWidget {
   const SignUpViewBody({super.key});
@@ -55,9 +53,6 @@ class _SignUpViewBodyState extends State<SignUpViewBody> {
     return BlocBuilder<SignupCubit, SignupState>(
       builder: (context, state) {
         if (state is SignupSuccess) {
-          WidgetsBinding.instance.addPostFrameCallback((_) {
-            customScaffold(context, 'Compte créé avec succès', kMainGreen);
-          });
           return const SignInView();
         } else if (state is SignupError) {
           return Center(child: Text(state.errorMessage));
@@ -220,7 +215,9 @@ class _SignUpViewBodyState extends State<SignUpViewBody> {
                         ),
                         SizedBox(height: SizeConfig.defaultSize! * 3),
                         InkWell(
-                          onTap: () {},
+                          onTap: () {
+                            GoRouter.of(context).push(AppRouter.kSignInView);
+                          },
                           child: FittedBox(
                             fit: BoxFit.scaleDown,
                             child: RichText(

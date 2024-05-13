@@ -27,7 +27,7 @@ class _UserNavigatioBodyState extends State<UserNavigatioBody> {
     pageController = PageController(initialPage: currentTab);
   }
 
-  final List<Widget> screens = [
+  late List<Widget> screens = [
     const ShoppingListView(),
     const FavoritesView(),
     const HomeView(),

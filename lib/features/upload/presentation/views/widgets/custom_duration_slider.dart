@@ -3,7 +3,9 @@ import 'package:couzinty/core/utils/constants.dart';
 import 'package:flutter/material.dart';
 
 class CustomDurationSlider extends StatefulWidget {
-  const CustomDurationSlider({super.key});
+  const CustomDurationSlider({super.key, required this.onSave});
+
+  final Function onSave;
 
   @override
   State<CustomDurationSlider> createState() => _CustomDurationSliderState();
@@ -17,7 +19,7 @@ class _CustomDurationSliderState extends State<CustomDurationSlider> {
       children: [
         Row(
           children: [
-            Text("Durée de cuisson", style: AppStyles.styleBold22(context)),
+            Text("Durée de cuisson", style: AppStyles.styleBold17(context)),
             Text("( en minutes )", style: AppStyles.styleMedium17(context)),
           ],
         ),
@@ -33,17 +35,17 @@ class _CustomDurationSliderState extends State<CustomDurationSlider> {
                 children: [
                   Text(
                     "10",
-                    style: AppStyles.styleBold17(context)
+                    style: AppStyles.styleBold15(context)
                         .copyWith(color: kMainGreen),
                   ),
                   Text(
                     "30",
-                    style: AppStyles.styleBold17(context)
+                    style: AppStyles.styleBold15(context)
                         .copyWith(color: kMainGreen),
                   ),
                   Text(
                     "50",
-                    style: AppStyles.styleBold17(context)
+                    style: AppStyles.styleBold15(context)
                         .copyWith(color: kMainGreen),
                   ),
                 ],
@@ -59,6 +61,7 @@ class _CustomDurationSliderState extends State<CustomDurationSlider> {
                 onChanged: (value) {
                   setState(() {
                     slider = value;
+                    widget.onSave(value);
                   });
                 })
           ],

@@ -4,14 +4,18 @@ import 'package:couzinty/features/upload/presentation/views/widgets/upload_custo
 import 'package:flutter/material.dart';
 
 class AddIngredient extends StatefulWidget {
-  const AddIngredient({super.key});
+  const AddIngredient({super.key, required this.onSave});
+
+  final Function onSave;
 
   @override
   State<AddIngredient> createState() => _AddIngredientState();
 }
 
 class _AddIngredientState extends State<AddIngredient> {
-  List ingrediants = [1];
+  List ingrediantsWidgets = [1];
+
+  List<String> ingredients = [];
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +26,7 @@ class _AddIngredientState extends State<AddIngredient> {
         children: [
           Text(
             "Ingrédient",
-            style: AppStyles.styleBold22(context),
+            style: AppStyles.styleBold17(context),
           ),
           const SizedBox(
             height: 20,
@@ -30,7 +34,7 @@ class _AddIngredientState extends State<AddIngredient> {
           ListView.builder(
               physics: const NeverScrollableScrollPhysics(),
               shrinkWrap: true,
-              itemCount: ingrediants.length,
+              itemCount: ingrediantsWidgets.length,
               itemBuilder: (context, index) => enterIngerediant(index)),
           ingrediantsButton(),
         ],
@@ -41,12 +45,12 @@ class _AddIngredientState extends State<AddIngredient> {
   enterIngerediant(int index) {
     return Dismissible(
         key: GlobalKey(),
-        direction: ingrediants.length > 1
+        direction: ingrediantsWidgets.length > 1
             ? DismissDirection.endToStart
             : DismissDirection.none,
         onDismissed: (direction) {
           setState(() {
-            ingrediants.removeAt(index);
+            ingrediantsWidgets.removeAt(index);
           });
         },
         child: Padding(
@@ -55,6 +59,10 @@ class _AddIngredientState extends State<AddIngredient> {
             radius: 30,
             hint: "Entrez l'ingrédient",
             icon: Icons.drag_indicator,
+            onSave: (value) {
+              ingredients.add(value);
+              widget.onSave(ingredients);
+            },
           ),
         ));
   }
@@ -65,7 +73,9 @@ class _AddIngredientState extends State<AddIngredient> {
       child: InkWell(
         onTap: () {
           setState(() {});
-          ingrediants.add(enterIngerediant(1));
+          ingrediantsWidgets.add(enterIngerediant(1));
+
+          print('ingredd $ingrediantsWidgets');
         },
         child: Container(
             alignment: Alignment.center,
