@@ -30,6 +30,7 @@ class UploadRepoImpl implements UploadRepo {
       'instructions': instructions,
       'rate': rate,
       'personsNumber': personsNumber,
+      'isAccepted': false,
     });
 
     // save image into firebase Storage

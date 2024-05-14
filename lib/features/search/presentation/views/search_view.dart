@@ -1,8 +1,9 @@
-import 'package:couzinty/core/utils/app_router.dart';
-import 'package:couzinty/core/utils/constants.dart';
-import 'package:couzinty/features/home/presentation/views/widgets/custom_text_form_field.dart';
+import 'package:couzinty/core/utils/functions/setup_service_locator.dart';
+import 'package:couzinty/features/search/data/repos/search_repo_impl.dart';
+import 'package:couzinty/features/search/presentation/viewmodel/cubit/search_cubit.dart';
+import 'package:couzinty/features/search/presentation/views/widgets/search_view_body.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class SearchScreen extends StatefulWidget {
   const SearchScreen({super.key});
@@ -12,61 +13,14 @@ class SearchScreen extends StatefulWidget {
 }
 
 class _SearchScreenState extends State<SearchScreen> {
-  TextEditingController searchController = TextEditingController();
-  static List previousSearchs = [];
-
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-        child: Scaffold(
-      body: SizedBox(
-        height: MediaQuery.of(context).size.height,
-        width: MediaQuery.of(context).size.width,
-        child: Column(
-          children: [
-            // Search Bar
-            Container(
-              color: Colors.white,
-              child: Padding(
-                padding: const EdgeInsets.all(20),
-                child: Row(
-                  children: [
-                    IconButton(
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                        icon: const Icon(
-                          Icons.arrow_back_ios,
-                          color: kMainGreen,
-                        )),
-                    Expanded(
-                      child: CustomTextFormField(
-                        hint: "Recherche",
-                        prefixIcon: Icons.search,
-                        controller: searchController,
-                        filled: true,
-                        suffixIcon: searchController.text.isEmpty
-                            ? null
-                            : Icons.cancel_sharp,
-                        onTapSuffixIcon: () {
-                          searchController.clear();
-                        },
-                        onChanged: (pure) {
-                          setState(() {});
-                        },
-                        onEditingComplete: () {
-                          // previousSearchs.add(searchController.text);
-                          GoRouter.of(context).push(AppRouter.kUserNavigation);
-                        },
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    ));
+    return BlocProvider<SearchCubit>(
+      create: (context) => SearchCubit(getIt<SearchRepoImpl>()),
+      child: const SafeArea(
+          child: Scaffold(
+        body: SearchViewBody(),
+      )),
+    );
   }
 }

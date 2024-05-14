@@ -1,15 +1,17 @@
 import 'dart:ui';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:couzinty/core/utils/app_styles.dart';
 import 'package:couzinty/core/utils/constants.dart';
+import 'package:couzinty/features/upload/data/models/recipe_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
 class RecipeDetailsView extends StatelessWidget {
-  const RecipeDetailsView({super.key, required this.image});
+  const RecipeDetailsView({super.key, required this.recipe});
 
-  final String image;
+  final RecipeModel recipe;
 
   @override
   Widget build(BuildContext context) {
@@ -20,8 +22,11 @@ class RecipeDetailsView extends StatelessWidget {
           SizedBox(
             width: double.infinity,
             child: Hero(
-              tag: 15,
-              child: Image.asset(image),
+              tag: recipe.name,
+              child: CachedNetworkImage(
+                imageUrl: recipe.image,
+                fit: BoxFit.fitWidth,
+              ),
             ),
           ),
           buttons(context),
@@ -159,7 +164,7 @@ class RecipeDetailsView extends StatelessWidget {
                       ],
                     ),
                   ),
-                  Text("Burgerrrr Burgeeer",
+                  Text(recipe.name,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: AppStyles.styleBold22(context)),
@@ -169,7 +174,7 @@ class RecipeDetailsView extends StatelessWidget {
                   Row(
                     children: [
                       Text(
-                        "Category",
+                        recipe.category,
                         style: AppStyles.styleMedium17(context),
                       ),
                       const Spacer(),
@@ -182,7 +187,7 @@ class RecipeDetailsView extends StatelessWidget {
                         },
                         itemSize: 24,
                         itemCount: 5,
-                        rating: 4.5,
+                        rating: recipe.rate,
                       ),
                     ],
                   ),
@@ -215,7 +220,9 @@ class RecipeDetailsView extends StatelessWidget {
                             ),
                             const SizedBox(height: 5),
                             Text(
-                              '3 Stuff',
+                              recipe.personsNumber == 1
+                                  ? '${recipe.personsNumber} Personne'
+                                  : '${recipe.personsNumber} Personnes',
                               style: AppStyles.styleBold15(context),
                             ),
                           ],
@@ -229,7 +236,7 @@ class RecipeDetailsView extends StatelessWidget {
                             ),
                             const SizedBox(height: 5),
                             Text(
-                              '60 Minutes',
+                              '${recipe.cookingTime} Minutes',
                               style: AppStyles.styleBold15(context),
                             ),
                           ],
@@ -243,7 +250,7 @@ class RecipeDetailsView extends StatelessWidget {
                             ),
                             const SizedBox(height: 5),
                             Text(
-                              'Easy',
+                              recipe.difficulty,
                               style: AppStyles.styleBold15(context),
                             ),
                           ],
@@ -271,8 +278,9 @@ class RecipeDetailsView extends StatelessWidget {
                   ListView.builder(
                     physics: const NeverScrollableScrollPhysics(),
                     shrinkWrap: true,
-                    itemCount: 3,
-                    itemBuilder: (context, index) => ingredients(context),
+                    itemCount: recipe.ingredients.length,
+                    itemBuilder: (context, index) =>
+                        ingredients(context, recipe.ingredients[index]),
                   ),
                   const Padding(
                     padding: EdgeInsets.symmetric(vertical: 15),
@@ -281,7 +289,7 @@ class RecipeDetailsView extends StatelessWidget {
                     ),
                   ),
                   Text(
-                    "Steps",
+                    "Instructions",
                     style:
                         AppStyles.styleBold17(context).copyWith(fontSize: 20),
                   ),
@@ -291,8 +299,9 @@ class RecipeDetailsView extends StatelessWidget {
                   ListView.builder(
                     physics: const NeverScrollableScrollPhysics(),
                     shrinkWrap: true,
-                    itemCount: 3,
-                    itemBuilder: (context, index) => steps(context, index),
+                    itemCount: recipe.instructions.length,
+                    itemBuilder: (context, index) =>
+                        steps(context, index, recipe.instructions[index]),
                   ),
                 ],
               ),
@@ -301,7 +310,7 @@ class RecipeDetailsView extends StatelessWidget {
         });
   }
 
-  ingredients(BuildContext context) {
+  ingredients(BuildContext context, String ingredient) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 10),
       child: Row(
@@ -319,7 +328,7 @@ class RecipeDetailsView extends StatelessWidget {
             width: 10,
           ),
           Text(
-            "4 Eggs",
+            ingredient,
             style: Theme.of(context).textTheme.bodyMedium,
           ),
         ],
@@ -327,7 +336,7 @@ class RecipeDetailsView extends StatelessWidget {
     );
   }
 
-  steps(BuildContext context, int index) {
+  steps(BuildContext context, int index, String step) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 20),
       child: Row(
@@ -347,7 +356,7 @@ class RecipeDetailsView extends StatelessWidget {
               SizedBox(
                 width: 270,
                 child: Text(
-                  'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum',
+                  step,
                   maxLines: 3,
                   style: Theme.of(context)
                       .textTheme

@@ -9,7 +9,6 @@ import 'package:couzinty/features/auth/presentation/viewmodel/signin_cubit/signi
 import 'package:couzinty/features/profile/data/repos/profile_repo_impl.dart';
 import 'package:couzinty/features/profile/presentation/views/viewmodel/user_cubit/user_cubit.dart';
 import 'package:couzinty/features/profile/presentation/views/widgets/user_image_picker.dart';
-import 'package:couzinty/features/upload/presentation/views/functions/show_pop_up.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
