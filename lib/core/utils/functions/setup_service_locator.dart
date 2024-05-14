@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:couzinty/features/auth/data/repos/auth_repo_impl.dart';
 import 'package:couzinty/features/auth/data/services/firestore_services.dart';
+import 'package:couzinty/features/profile/data/repos/profile_repo_impl.dart';
 import 'package:couzinty/features/upload/data/repos/upload_repo_impl.dart';
 import 'package:couzinty/features/upload/data/services/firebase_storage_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -33,4 +34,8 @@ Future<void> setupServiceLocator() async {
       UploadRepoImpl(firebaseStorageService, firestore: firestore);
 
   GetIt.I.registerLazySingleton(() => uploadRepo);
+
+  final profileRepo =
+      ProfileRepoImpl(firebaseStorage, firestore, firebaseAuth: firebaseAuth);
+  GetIt.I.registerLazySingleton(() => profileRepo);
 }

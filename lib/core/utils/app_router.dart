@@ -3,7 +3,7 @@ import 'package:couzinty/features/auth/presentation/views/signin_view.dart';
 import 'package:couzinty/features/auth/presentation/views/signup_view.dart';
 import 'package:couzinty/features/navigation/presentation/views/user_navigation.dart';
 import 'package:couzinty/features/onboarding/presentation/views/onboarding_view.dart';
-import 'package:couzinty/features/upload/presentation/views/update_view.dart';
+import 'package:couzinty/features/upload/presentation/views/upload_view.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../features/splash/presentation/views/splash_view.dart';

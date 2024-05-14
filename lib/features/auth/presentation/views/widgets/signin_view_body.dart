@@ -8,6 +8,7 @@ import 'package:couzinty/core/utils/widgets/custom_loading_indicator.dart';
 import 'package:couzinty/features/auth/presentation/viewmodel/signin_cubit/signin_cubit.dart';
 import 'package:couzinty/features/auth/presentation/viewmodel/signin_cubit/signin_state.dart';
 import 'package:couzinty/features/navigation/presentation/views/user_navigation.dart';
+import 'package:couzinty/features/profile/presentation/views/viewmodel/user_cubit/user_cubit.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -47,6 +48,7 @@ class _LoginScreenState extends State<SignInViewBody> {
   Widget build(BuildContext context) {
     return BlocBuilder<SigninCubit, SigninState>(builder: (context, state) {
       if (state is SigninSuccess) {
+        context.read<UserCubit>().setUser(state.user);
         return const UserNavigation();
       } else if (state is SigninError) {
         return Center(child: Text(state.errorMessage));

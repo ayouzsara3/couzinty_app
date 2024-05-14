@@ -15,4 +15,19 @@ class UserModel {
       required this.image,
       required this.favorites,
       required this.shoppingList});
+
+  UserModel copyWith({
+    String? userName,
+    String? image,
+  }) {
+    return UserModel(
+      id: id,
+      email: email,
+      userName: userName ?? this.userName,
+      role: role,
+      image: image ?? this.image,
+      favorites: favorites,
+      shoppingList: shoppingList,
+    );
+  }
 }
