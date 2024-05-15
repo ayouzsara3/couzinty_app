@@ -34,13 +34,10 @@ class AuthRepoImpl implements AuthRepo {
         email: email,
         password: password,
       );
-      print('dkhlt ll account');
 
       //get userData from firestore
       final user =
           await _firestoreService.getUserData(userCredentials.user!.uid);
-
-      print('savit l data');
 
       return user!;
     } catch (e) {

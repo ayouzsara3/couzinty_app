@@ -19,7 +19,8 @@ class UploadRepoImpl implements UploadRepo {
       required ingredients,
       required instructions,
       required rate,
-      required personsNumber}) async {
+      required personsNumber,
+      required userRole}) async {
     DocumentReference recipeRef = await _firestore.collection('recipes').add({
       'name': name,
       'image': '',
@@ -30,7 +31,7 @@ class UploadRepoImpl implements UploadRepo {
       'instructions': instructions,
       'rate': rate,
       'personsNumber': personsNumber,
-      'isAccepted': false,
+      'isAccepted': userRole == 'admin' ? true : false,
     });
 
     // save image into firebase Storage

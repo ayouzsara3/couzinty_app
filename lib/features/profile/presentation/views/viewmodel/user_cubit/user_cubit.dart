@@ -15,9 +15,6 @@ class UserCubit extends Cubit<UserModel> {
     String? userName,
     String? image,
   }) {
-    print('Image $image');
-    print('userName ${state.userName}');
-    print('userName ${state.image}');
     UserModel updatedUser = state.copyWith(
       userName: userName ?? state.userName,
       image: image ?? state.image,

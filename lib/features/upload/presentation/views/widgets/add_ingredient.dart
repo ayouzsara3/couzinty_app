@@ -74,8 +74,6 @@ class _AddIngredientState extends State<AddIngredient> {
         onTap: () {
           setState(() {});
           ingrediantsWidgets.add(enterIngerediant(1));
-
-          print('ingredd $ingrediantsWidgets');
         },
         child: Container(
             alignment: Alignment.center,

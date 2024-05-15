@@ -9,6 +9,7 @@ import 'package:couzinty/features/auth/presentation/viewmodel/signin_cubit/signi
 import 'package:couzinty/features/auth/presentation/viewmodel/signin_cubit/signin_state.dart';
 import 'package:couzinty/features/navigation/presentation/views/user_navigation.dart';
 import 'package:couzinty/features/profile/presentation/views/viewmodel/user_cubit/user_cubit.dart';
+import 'package:couzinty/features/recipes_review/presentation/views/recipes_review_view.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -48,9 +49,15 @@ class _LoginScreenState extends State<SignInViewBody> {
   Widget build(BuildContext context) {
     return BlocBuilder<SigninCubit, SigninState>(builder: (context, state) {
       if (state is SigninSuccess) {
+        print('user rolleee ${state.user.role}');
         context.read<UserCubit>().setUser(state.user);
-        return const UserNavigation();
+        if (state.user.role == 'user') {
+          return const UserNavigation();
+        } else {
+          return const RecipesReviewView();
+        }
       } else if (state is SigninError) {
+        print('user rolleee ${state.errorMessage}');
         return Center(child: Text(state.errorMessage));
       } else if (state is SigninLoading) {
         return const Center(child: CustomLoadingIncicator());

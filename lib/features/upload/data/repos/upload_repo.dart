@@ -8,5 +8,6 @@ abstract class UploadRepo {
       required ingredients,
       required instructions,
       required rate,
-      required personsNumber});
+      required personsNumber,
+      required userRole});
 }

@@ -35,10 +35,14 @@ class _SplashViewBodyState extends State<SplashViewBody> {
 
     if (isLoggedIn) {
       final user = await _fetchUserInformation();
-      print('user ${user?.userName}');
-      print('user ${user?.image}');
+
       context.read<UserCubit>().setUser(user!);
-      GoRouter.of(context).pushReplacement(AppRouter.kUserNavigation);
+
+      if (user.role == 'user') {
+        GoRouter.of(context).pushReplacement(AppRouter.kUserNavigation);
+      } else {
+        GoRouter.of(context).pushReplacement(AppRouter.kRecipesReviewView);
+      }
     } else {
       Future.delayed(const Duration(seconds: 2), () {});
 
@@ -48,7 +52,6 @@ class _SplashViewBodyState extends State<SplashViewBody> {
 
   Future<UserModel?> _fetchUserInformation() async {
     try {
-      print('ha nbda nfetchi');
       final userId = getIt<FirebaseAuth>().currentUser!.uid;
 
       UserModel? userData = await getIt<FirestoreService>().getUserData(userId);

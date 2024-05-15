@@ -7,6 +7,7 @@ import 'package:couzinty/core/utils/constants.dart';
 import 'package:couzinty/core/utils/size_config.dart';
 import 'package:couzinty/core/utils/widgets/custom_button.dart';
 import 'package:couzinty/core/utils/widgets/custom_loading_indicator.dart';
+import 'package:couzinty/features/profile/presentation/views/viewmodel/user_cubit/user_cubit.dart';
 import 'package:couzinty/features/upload/presentation/viewmodel/upload_cubit/upload_cubit.dart';
 import 'package:couzinty/features/upload/presentation/viewmodel/upload_cubit/upload_state.dart';
 import 'package:couzinty/features/upload/presentation/views/functions/show_pop_up.dart';
@@ -130,7 +131,7 @@ class _UploadViewBodyState extends State<UploadViewBody> {
                           FilledButton(
                               style: const ButtonStyle(
                                   backgroundColor:
-                                      MaterialStatePropertyAll(kMainGreen)),
+                                      WidgetStatePropertyAll(kMainGreen)),
                               onPressed: _showItemSelector,
                               child: const Text(
                                 'Choisissez le Nombre',
@@ -199,16 +200,19 @@ class _UploadViewBodyState extends State<UploadViewBody> {
 
                           _formKey.currentState!.save();
 
+                          final userRole = context.read<UserCubit>().state.role;
+
                           await context.read<UploadCubit>().uploadRecipe(
                               name: recipeName,
                               image: recipeImage,
                               category: selectedCategory,
-                              cookingTime: selectedCookingTime,
+                              cookingTime: selectedCookingTime.toInt(),
                               difficulty: selectedDifficulty,
                               ingredients: ingredients,
                               instructions: instructions,
                               personsNumber: int.tryParse(personsNumber.data!),
-                              rate: selectedRate);
+                              rate: selectedRate,
+                              userRole: userRole);
                         },
                         text: "Ajouter",
                         fontSize: 18,

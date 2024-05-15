@@ -15,7 +15,8 @@ class UploadCubit extends Cubit<UploadState> {
       required ingredients,
       required instructions,
       required rate,
-      required personsNumber}) async {
+      required personsNumber,
+      required userRole}) async {
     emit(UploadLoading());
     try {
       await uploadRepo.uploadRecipe(
@@ -27,11 +28,12 @@ class UploadCubit extends Cubit<UploadState> {
           ingredients: ingredients,
           instructions: ingredients,
           personsNumber: personsNumber,
-          rate: rate);
+          rate: rate,
+          userRole: userRole);
 
       emit(UploadSuccess());
-      print('uploadddedddddddd');
     } catch (e) {
+      print(e);
       emit(UploadError("Signup failed: $e"));
     }
   }

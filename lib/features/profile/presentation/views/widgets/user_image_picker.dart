@@ -41,7 +41,6 @@ class _UserImagePickerState extends State<UserImagePicker> {
 
   @override
   Widget build(BuildContext context) {
-    print('image url ${widget.image}');
     return SizedBox(
       width: 110,
       height: 110,

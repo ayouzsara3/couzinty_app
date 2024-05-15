@@ -103,7 +103,6 @@ class _ProfileViewBodyState extends State<ProfileViewBody> {
                     title: Form(
                       key: _formKey,
                       child: TextFormField(
-                          // controller: _userNameController,
                           style: AppStyles.styleBold15(context),
                           onSaved: (value) {
                             _entredUserName = value!;
