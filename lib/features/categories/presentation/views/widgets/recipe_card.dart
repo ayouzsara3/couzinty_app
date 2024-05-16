@@ -30,7 +30,7 @@ class RecipeCard extends StatelessWidget {
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(12),
                 child: Hero(
-                    tag: recipe.name,
+                    tag: recipe.id,
                     child: CachedNetworkImage(
                       fit: BoxFit.cover,
                       imageUrl: recipe.image,

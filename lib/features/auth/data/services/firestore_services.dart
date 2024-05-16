@@ -16,7 +16,7 @@ class FirestoreService {
         'role': role,
         'image': '',
         'favorites': [],
-        'shoppingList': [],
+        'shoppingList': '',
       });
     } catch (e) {
       print(e);
@@ -34,8 +34,7 @@ class FirestoreService {
           role: userData.data()?['role'] ?? '',
           image: userData.data()?['image'] ?? '',
           favorites: List<String>.from(userData.data()?['favorites'] ?? []),
-          shoppingList:
-              List<String>.from(userData.data()?['shoppingList'] ?? []),
+          shoppingList: userData.data()?['shoppingList'] ?? '',
         );
       }
     } catch (e) {

@@ -4,7 +4,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:couzinty/core/utils/app_styles.dart';
 import 'package:couzinty/core/utils/constants.dart';
 import 'package:couzinty/core/utils/functions/setup_service_locator.dart';
-import 'package:couzinty/features/categories/data/repos/category_repo.dart';
 import 'package:couzinty/features/categories/data/repos/category_repo_impl.dart';
 import 'package:couzinty/features/profile/presentation/views/viewmodel/user_cubit/user_cubit.dart';
 import 'package:couzinty/features/upload/data/models/recipe_model.dart';
@@ -12,6 +11,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:quickalert/models/quickalert_type.dart';
+import 'package:quickalert/widgets/quickalert_dialog.dart';
 
 class RecipeDetailsView extends StatefulWidget {
   const RecipeDetailsView({super.key, required this.recipe});
@@ -24,16 +25,98 @@ class RecipeDetailsView extends StatefulWidget {
 
 class _RecipeDetailsViewState extends State<RecipeDetailsView> {
   late bool isFav;
+  late bool isList;
   late String userId;
+  late String userRole;
   bool isFavorite() {
     return context.read<UserCubit>().state.favorites.contains(widget.recipe.id);
+  }
+
+  bool isInShoppingList() {
+    return context.read<UserCubit>().state.shoppingList == widget.recipe.id;
+  }
+
+  onClickShoppingList() async {
+    final isEmptyShoppingList =
+        context.read<UserCubit>().state.shoppingList!.isEmpty;
+    try {
+      if (isEmptyShoppingList) {
+        await getIt<CategoryRepoImpl>()
+            .shoppingListAction('add', widget.recipe.id, userId);
+
+        context
+            .read<UserCubit>()
+            .updateUser(shoppingListRecipeId: widget.recipe.id);
+      } else if (!isEmptyShoppingList && !isList) {
+        QuickAlert.show(
+          context: context,
+          type: QuickAlertType.confirm,
+          text: 'Voulez-vous effacer la liste précédente ?',
+          confirmBtnText: 'effacer',
+          cancelBtnText: 'annuler',
+          title: 'Es-tu sûr?',
+          textColor: kDarkBlue,
+          cancelBtnTextStyle:
+              AppStyles.styleBold17(context).copyWith(color: kDarkBlue),
+          headerBackgroundColor: kMainGreen,
+          confirmBtnColor: kMainGreen,
+          onConfirmBtnTap: () async {
+            await getIt<CategoryRepoImpl>()
+                .shoppingListAction('add', widget.recipe.id, userId);
+
+            context
+                .read<UserCubit>()
+                .updateUser(shoppingListRecipeId: widget.recipe.id);
+
+            Navigator.of(context).pop();
+          },
+        );
+      } else {
+        await getIt<CategoryRepoImpl>()
+            .shoppingListAction('remove', widget.recipe.id, userId);
+        context
+            .read<UserCubit>()
+            .updateUser(shoppingListRecipeId: widget.recipe.id);
+      }
+
+      setState(() {
+        isList = !isList;
+      });
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  onClickFavorite() async {
+    try {
+      if (!isFav) {
+        await getIt<CategoryRepoImpl>()
+            .favoriteRecipeAction('add', widget.recipe.id, userId);
+      } else {
+        await getIt<CategoryRepoImpl>()
+            .favoriteRecipeAction('remove', widget.recipe.id, userId);
+      }
+
+      if (!context.mounted) {
+        return;
+      }
+      context.read<UserCubit>().updateUser(recipeId: widget.recipe.id);
+
+      setState(() {
+        isFav = !isFav;
+      });
+    } catch (e) {
+      print(e);
+    }
   }
 
   @override
   void initState() {
     super.initState();
     isFav = isFavorite();
+    isList = isInShoppingList();
     userId = context.read<UserCubit>().state.id;
+    userRole = context.read<UserCubit>().state.role;
   }
 
   @override
@@ -45,7 +128,7 @@ class _RecipeDetailsViewState extends State<RecipeDetailsView> {
           SizedBox(
             width: double.infinity,
             child: Hero(
-              tag: widget.recipe.name,
+              tag: widget.recipe.id,
               child: CachedNetworkImage(
                 imageUrl: widget.recipe.image,
                 fit: BoxFit.fitWidth,
@@ -93,94 +176,89 @@ class _RecipeDetailsViewState extends State<RecipeDetailsView> {
             ),
           ),
           const Spacer(),
-          InkWell(
-            onTap: () {
-              Navigator.pop(context);
-            },
-            child: Container(
-              clipBehavior: Clip.hardEdge,
-              height: 55,
-              width: 55,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(25),
-              ),
-              child: BackdropFilter(
-                filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
-                child: Container(
-                  height: 55,
-                  width: 55,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(25),
-                  ),
-                  child: const Icon(
-                    Icons.shopping_cart,
-                    size: 20,
-                    color: Colors.white,
-                  ),
-                ),
-              ),
-            ),
-          ),
-          const SizedBox(width: 16),
-          InkWell(
-            onTap: () async {
-              try {
-                if (!isFav) {
-                  await getIt<CategoryRepoImpl>()
-                      .favoriteRecipeAction('add', widget.recipe.id, userId);
-                } else {
-                  await getIt<CategoryRepoImpl>()
-                      .favoriteRecipeAction('remove', widget.recipe.id, userId);
-                }
-
-                if (!context.mounted) {
-                  return;
-                }
-                context
-                    .read<UserCubit>()
-                    .updateUser(recipeId: widget.recipe.id);
-
-                setState(() {
-                  isFav = !isFav;
-                });
-              } catch (e) {
-                print(e);
-              }
-            },
-            child: Container(
-              clipBehavior: Clip.hardEdge,
-              height: 55,
-              width: 55,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(25),
-              ),
-              child: BackdropFilter(
-                filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
-                child: Container(
-                  height: 55,
-                  width: 55,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(25),
-                  ),
-                  child: AnimatedSwitcher(
-                    duration: const Duration(milliseconds: 300),
-                    transitionBuilder: (child, animation) {
-                      return ScaleTransition(
-                        scale: Tween(begin: 0.0, end: 1.0).animate(animation),
-                        child: child,
-                      );
-                    },
-                    child: Icon(
-                      CupertinoIcons.heart_fill,
-                      size: 20,
-                      color: !isFav ? Colors.white : kMainGreen,
-                      key: ValueKey(isFav),
+          userRole == 'user'
+              ? InkWell(
+                  onTap: () async {
+                    await onClickShoppingList();
+                  },
+                  child: Container(
+                    clipBehavior: Clip.hardEdge,
+                    height: 55,
+                    width: 55,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(25),
+                    ),
+                    child: BackdropFilter(
+                      filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
+                      child: Container(
+                        height: 55,
+                        width: 55,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(25),
+                        ),
+                        child: AnimatedSwitcher(
+                          duration: const Duration(milliseconds: 300),
+                          transitionBuilder: (child, animation) {
+                            return ScaleTransition(
+                              scale: Tween(begin: 0.0, end: 1.0)
+                                  .animate(animation),
+                              child: child,
+                            );
+                          },
+                          child: Icon(
+                            Icons.shopping_cart,
+                            size: 20,
+                            color: !isList ? Colors.white : kMainGreen,
+                            key: ValueKey(isList),
+                          ),
+                        ),
+                      ),
                     ),
                   ),
-                ),
-              ),
-            ),
-          ),
+                )
+              : const SizedBox(),
+          const SizedBox(width: 16),
+          userRole == 'user'
+              ? InkWell(
+                  onTap: () async {
+                    onClickFavorite();
+                  },
+                  child: Container(
+                    clipBehavior: Clip.hardEdge,
+                    height: 55,
+                    width: 55,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(25),
+                    ),
+                    child: BackdropFilter(
+                      filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
+                      child: Container(
+                        height: 55,
+                        width: 55,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(25),
+                        ),
+                        child: AnimatedSwitcher(
+                          duration: const Duration(milliseconds: 300),
+                          transitionBuilder: (child, animation) {
+                            return ScaleTransition(
+                              scale: Tween(begin: 0.0, end: 1.0)
+                                  .animate(animation),
+                              child: child,
+                            );
+                          },
+                          child: Icon(
+                            CupertinoIcons.heart_fill,
+                            size: 20,
+                            color: !isFav ? Colors.white : kMainGreen,
+                            key: ValueKey(isFav),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                )
+              : const SizedBox(),
         ],
       ),
     );

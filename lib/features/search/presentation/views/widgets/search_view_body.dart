@@ -93,7 +93,7 @@ class _SearchViewBodyState extends State<SearchViewBody> {
                   } else {
                     return const Center(
                       child: Text('Commencez à chercher des recettes'),
-                    ); // Placeholder for initial UI
+                    );
                   }
                 },
               ),

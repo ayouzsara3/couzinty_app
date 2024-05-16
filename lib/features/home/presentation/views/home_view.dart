@@ -1,18 +1,41 @@
 import 'package:couzinty/core/utils/app_styles.dart';
+import 'package:couzinty/core/utils/functions/setup_service_locator.dart';
 import 'package:couzinty/core/utils/size_config.dart';
+import 'package:couzinty/features/home/data/repos/home_repo_impl.dart';
+import 'package:couzinty/features/home/presentation/viewmodel/fetch_slider_recipes_cubit/fetch_slider_recipes_cubit.dart';
 import 'package:couzinty/features/home/presentation/views/widgets/custom_text_form_field.dart';
 import 'package:couzinty/features/home/presentation/views/widgets/home_custom_slider.dart';
 import 'package:couzinty/features/home/presentation/views/widgets/custom_grid.dart';
+import 'package:couzinty/features/profile/presentation/views/viewmodel/user_cubit/user_cubit.dart';
 import 'package:couzinty/features/search/presentation/views/search_view.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shimmer/shimmer.dart';
 
-class HomeView extends StatelessWidget {
+class HomeView extends StatefulWidget {
   const HomeView({super.key});
 
   @override
+  State<HomeView> createState() => _HomeViewState();
+}
+
+class _HomeViewState extends State<HomeView> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    context.read<FetchSliderRecipesCubit>().fetchSliderRecipes();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final userName = context.read<UserCubit>().state.userName;
     return SingleChildScrollView(
       child: SafeArea(
+        // child: Shimmer.fromColors(
+        // baseColor: Colors.grey.shade300,
+        // highlightColor: Colors.yellow,
+
         child: Column(
           children: [
             Stack(
@@ -30,7 +53,7 @@ class HomeView extends StatelessWidget {
                     const SizedBox(height: 16),
                     Padding(
                       padding: const EdgeInsets.all(10),
-                      child: Text('Bienvenue Sara 👋',
+                      child: Text('Bienvenue $userName 👋',
                           textAlign: TextAlign.start,
                           style: AppStyles.styleBold22(context)
                               .copyWith(color: Colors.black87)),
@@ -90,6 +113,7 @@ class HomeView extends StatelessWidget {
             ),
           ],
         ),
+        // ),
       ),
     );
   }

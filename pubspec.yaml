@@ -48,7 +48,9 @@ dependencies:
   get_it: ^7.7.0
   go_router: ^14.0.2
   image_picker: ^1.1.1
+  quickalert: ^1.1.0
   shared_preferences: ^2.2.3
+  shimmer: ^3.0.0
 
 dev_dependencies:
   flutter_lints: ^3.0.0

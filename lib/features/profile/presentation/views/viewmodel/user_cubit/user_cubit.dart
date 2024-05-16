@@ -15,11 +15,13 @@ class UserCubit extends Cubit<UserModel> {
     String? userName,
     String? image,
     String? recipeId,
+    String? shoppingListRecipeId,
   }) {
     UserModel updatedUser = state.copyWith(
       userName: userName ?? state.userName,
       image: image ?? state.image,
       recipeId: recipeId,
+      shoppingListRecipeId: shoppingListRecipeId,
     );
     emit(updatedUser);
   }

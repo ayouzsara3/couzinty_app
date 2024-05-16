@@ -40,4 +40,20 @@ class CategoryRepoImpl implements CategoryRepo {
       });
     }
   }
+
+  @override
+  Future<void> shoppingListAction(
+      String action, recipeId, String userId) async {
+    if (action == 'add') {
+      await _firebaseFirestore
+          .collection('users')
+          .doc(userId)
+          .update({'shoppingList': recipeId});
+    } else {
+      await _firebaseFirestore
+          .collection('users')
+          .doc(userId)
+          .update({'shoppingList': ''});
+    }
+  }
 }

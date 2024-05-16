@@ -5,7 +5,7 @@ class UserModel {
   final String role;
   final String image;
   final List<String> favorites;
-  final List<String> shoppingList;
+  String? shoppingList;
 
   UserModel(
       {required this.id,
@@ -20,12 +20,21 @@ class UserModel {
     String? userName,
     String? image,
     String? recipeId,
+    String? shoppingListRecipeId,
   }) {
     if (recipeId != null) {
       if (favorites.contains(recipeId)) {
         favorites.remove(recipeId);
       } else {
         favorites.add(recipeId);
+      }
+    }
+
+    if (shoppingListRecipeId != null) {
+      if (shoppingList == shoppingListRecipeId) {
+        shoppingList = '';
+      } else {
+        shoppingList = shoppingListRecipeId;
       }
     }
     return UserModel(
