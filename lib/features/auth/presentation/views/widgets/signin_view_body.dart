@@ -49,7 +49,6 @@ class _LoginScreenState extends State<SignInViewBody> {
   Widget build(BuildContext context) {
     return BlocBuilder<SigninCubit, SigninState>(builder: (context, state) {
       if (state is SigninSuccess) {
-        print('user rolleee ${state.user.role}');
         context.read<UserCubit>().setUser(state.user);
         if (state.user.role == 'user') {
           return const UserNavigation();
@@ -57,7 +56,6 @@ class _LoginScreenState extends State<SignInViewBody> {
           return const RecipesReviewView();
         }
       } else if (state is SigninError) {
-        print('user rolleee ${state.errorMessage}');
         return Center(child: Text(state.errorMessage));
       } else if (state is SigninLoading) {
         return const Center(child: CustomLoadingIncicator());

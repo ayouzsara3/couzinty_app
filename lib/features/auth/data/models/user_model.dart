@@ -1,3 +1,5 @@
+import 'package:couzinty/core/utils/functions/arrays_equal.dart';
+
 class UserModel {
   final String id;
   final String email;
@@ -5,7 +7,7 @@ class UserModel {
   final String role;
   final String image;
   final List<String> favorites;
-  String? shoppingList;
+  List<String>? shoppingList;
 
   UserModel(
       {required this.id,
@@ -20,7 +22,7 @@ class UserModel {
     String? userName,
     String? image,
     String? recipeId,
-    String? shoppingListRecipeId,
+    List<String>? shoppingList,
   }) {
     if (recipeId != null) {
       if (favorites.contains(recipeId)) {
@@ -29,14 +31,14 @@ class UserModel {
         favorites.add(recipeId);
       }
     }
-
-    if (shoppingListRecipeId != null) {
-      if (shoppingList == shoppingListRecipeId) {
-        shoppingList = '';
+    if (shoppingList != null) {
+      if (arraysEqual(shoppingList, this.shoppingList!)) {
+        this.shoppingList!.clear();
       } else {
-        shoppingList = shoppingListRecipeId;
+        this.shoppingList = shoppingList;
       }
     }
+
     return UserModel(
       id: id,
       email: email,
@@ -44,7 +46,7 @@ class UserModel {
       role: role,
       image: image ?? this.image,
       favorites: favorites,
-      shoppingList: shoppingList,
+      shoppingList: shoppingList ?? this.shoppingList,
     );
   }
 }

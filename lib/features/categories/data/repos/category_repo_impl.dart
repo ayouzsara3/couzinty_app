@@ -43,17 +43,17 @@ class CategoryRepoImpl implements CategoryRepo {
 
   @override
   Future<void> shoppingListAction(
-      String action, recipeId, String userId) async {
+      String action, List<String> ingredients, String userId) async {
     if (action == 'add') {
       await _firebaseFirestore
           .collection('users')
           .doc(userId)
-          .update({'shoppingList': recipeId});
+          .update({'shoppingList': ingredients});
     } else {
       await _firebaseFirestore
           .collection('users')
           .doc(userId)
-          .update({'shoppingList': ''});
+          .update({'shoppingList': []});
     }
   }
 }

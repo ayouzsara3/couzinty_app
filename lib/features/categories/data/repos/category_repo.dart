@@ -7,5 +7,5 @@ abstract class CategoryRepo {
       String action, dynamic recipeId, String userId);
 
   Future<void> shoppingListAction(
-      String action, dynamic recipeId, String userId);
+      String action, List<String> ingredients, String userId);
 }

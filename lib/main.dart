@@ -47,7 +47,7 @@ void main() async {
             role: '',
             image: '',
             favorites: [],
-            shoppingList: '',
+            shoppingList: [],
           )),
         ),
         BlocProvider<FetchRecipesByCategoryCubit>(

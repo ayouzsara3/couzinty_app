@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:couzinty/core/utils/app_styles.dart';
 import 'package:couzinty/core/utils/constants.dart';
+import 'package:couzinty/core/utils/functions/arrays_equal.dart';
 import 'package:couzinty/core/utils/functions/setup_service_locator.dart';
 import 'package:couzinty/features/categories/data/repos/category_repo_impl.dart';
 import 'package:couzinty/features/profile/presentation/views/viewmodel/user_cubit/user_cubit.dart';
@@ -33,20 +34,30 @@ class _RecipeDetailsViewState extends State<RecipeDetailsView> {
   }
 
   bool isInShoppingList() {
-    return context.read<UserCubit>().state.shoppingList == widget.recipe.id;
+    final shoppingList = context.read<UserCubit>().state.shoppingList;
+    final recipeIngredient = widget.recipe.ingredients;
+    print('shoopingList $shoppingList');
+    print('recipeIngredient $recipeIngredient');
+    print('isequal ${arraysEqual(shoppingList!, recipeIngredient)}');
+    return arraysEqual(shoppingList, recipeIngredient);
   }
 
   onClickShoppingList() async {
     final isEmptyShoppingList =
         context.read<UserCubit>().state.shoppingList!.isEmpty;
+    final shoppingList = context.read<UserCubit>().state.shoppingList;
+    final recipeIngredient = widget.recipe.ingredients;
+    print('shoopingList $shoppingList');
+    print('recipeIngredient $recipeIngredient');
+
     try {
       if (isEmptyShoppingList) {
         await getIt<CategoryRepoImpl>()
-            .shoppingListAction('add', widget.recipe.id, userId);
+            .shoppingListAction('add', widget.recipe.ingredients, userId);
 
         context
             .read<UserCubit>()
-            .updateUser(shoppingListRecipeId: widget.recipe.id);
+            .updateUser(shoppingList: widget.recipe.ingredients);
       } else if (!isEmptyShoppingList && !isList) {
         QuickAlert.show(
           context: context,
@@ -62,21 +73,20 @@ class _RecipeDetailsViewState extends State<RecipeDetailsView> {
           confirmBtnColor: kMainGreen,
           onConfirmBtnTap: () async {
             await getIt<CategoryRepoImpl>()
-                .shoppingListAction('add', widget.recipe.id, userId);
+                .shoppingListAction('add', widget.recipe.ingredients, userId);
 
             context
                 .read<UserCubit>()
-                .updateUser(shoppingListRecipeId: widget.recipe.id);
+                .updateUser(shoppingList: widget.recipe.ingredients);
 
             Navigator.of(context).pop();
           },
         );
       } else {
         await getIt<CategoryRepoImpl>()
-            .shoppingListAction('remove', widget.recipe.id, userId);
-        context
-            .read<UserCubit>()
-            .updateUser(shoppingListRecipeId: widget.recipe.id);
+            .shoppingListAction('remove', widget.recipe.ingredients, userId);
+
+        context.read<UserCubit>().updateUser(shoppingList: []);
       }
 
       setState(() {
