@@ -19,7 +19,7 @@ class RecipesReviewRepoImpl implements RecipesReviewRepo {
     StreamController<List<RecipeModel>> controller =
         StreamController<List<RecipeModel>>();
 
-    final pendingRecipesSnapshot = _firebaseFirestore
+    _firebaseFirestore
         .collection('recipes')
         .where('isAccepted', isEqualTo: false)
         .snapshots()

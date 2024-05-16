@@ -3,9 +3,7 @@ import 'package:couzinty/core/utils/app_styles.dart';
 import 'package:couzinty/core/utils/constants.dart';
 import 'package:couzinty/features/categories/presentation/views/recipe_details_view.dart';
 import 'package:couzinty/features/upload/data/models/recipe_model.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
 class RecipeCard extends StatelessWidget {

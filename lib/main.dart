@@ -5,6 +5,8 @@ import 'package:couzinty/features/auth/data/models/user_model.dart';
 import 'package:couzinty/features/auth/data/repos/auth_repo_impl.dart';
 import 'package:couzinty/features/auth/presentation/viewmodel/signin_cubit/signin_cubit.dart';
 import 'package:couzinty/features/auth/presentation/viewmodel/signup/signup_cubit.dart';
+import 'package:couzinty/features/categories/data/repos/category_repo_impl.dart';
+import 'package:couzinty/features/categories/presentation/viewmodel/fetch_recipes_by_category_cubit/fetch_recipes_by_category_cubit.dart';
 import 'package:couzinty/features/profile/presentation/views/viewmodel/user_cubit/user_cubit.dart';
 
 import 'package:couzinty/firebase_options.dart';
@@ -33,7 +35,7 @@ void main() async {
         BlocProvider<SignupCubit>(
             create: (context) => SignupCubit(authRepo: getIt<AuthRepoImpl>())),
 
-        BlocProvider(
+        BlocProvider<UserCubit>(
           create: (context) => UserCubit(UserModel(
             id: '', // Provide initial values for your UserModel fields
             email: '',
@@ -43,6 +45,10 @@ void main() async {
             favorites: [],
             shoppingList: [],
           )),
+        ),
+        BlocProvider<FetchRecipesByCategoryCubit>(
+          create: (context) =>
+              FetchRecipesByCategoryCubit(getIt<CategoryRepoImpl>()),
         )
         // Add more BlocProviders here if needed
       ],

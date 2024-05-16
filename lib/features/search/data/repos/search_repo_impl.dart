@@ -19,7 +19,11 @@ class SearchRepoImpl implements SearchRepo {
     // We use debounceTimer to avoid the huge number of requests to server
     Timer? debounceTimer;
 
-    _firebaseFirestore.collection('recipes').snapshots().listen((snapshot) {
+    _firebaseFirestore
+        .collection('recipes')
+        .where('isAccepted', isEqualTo: true)
+        .snapshots()
+        .listen((snapshot) {
       // Cancel the previous timer if it's active
       debounceTimer?.cancel();
 

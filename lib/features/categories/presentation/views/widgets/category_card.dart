@@ -1,6 +1,8 @@
 import 'package:couzinty/features/categories/data/models/category_model.dart';
+import 'package:couzinty/features/categories/presentation/viewmodel/fetch_recipes_by_category_cubit/fetch_recipes_by_category_cubit.dart';
 import 'package:couzinty/features/categories/presentation/views/category_list_view.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class CategoryCard extends StatelessWidget {
   const CategoryCard({
@@ -14,6 +16,7 @@ class CategoryCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
+        context.read<FetchRecipesByCategoryCubit>().fetchRecipes(category.name);
         Navigator.of(context).push(MaterialPageRoute(
             builder: ((context) => CategoryListView(category: category))));
       },
