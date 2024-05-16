@@ -1,3 +1,4 @@
+import 'package:couzinty/core/utils/widgets/build_recipes_list_view.dart';
 import 'package:couzinty/core/utils/widgets/custom_loading_indicator.dart';
 import 'package:couzinty/features/categories/data/models/category_model.dart';
 import 'package:couzinty/features/categories/presentation/viewmodel/fetch_recipes_by_category_cubit/fetch_recipes_by_category_cubit.dart';
@@ -36,23 +37,17 @@ class _CategoryListViewState extends State<CategoryListView> {
             child: Text(state.message),
           );
         } else if (state is FetchRecipesByCategorySuccess) {
-          return _buildCategoryListView(state.recipes);
+          if (state.recipes.isEmpty) {
+            return const Center(
+              child: Text('aucune recette trouvée'),
+            );
+          } else {
+            return buildRecipesListView(state.recipes);
+          }
         } else {
           return const Center(child: CustomLoadingIncicator());
         }
       }),
-    );
-  }
-
-  Widget _buildCategoryListView(List<RecipeModel> recipes) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 10),
-      child: ListView.builder(
-        itemCount: recipes.length,
-        itemBuilder: (context, index) {
-          return RecipeCard(recipe: recipes[index]);
-        },
-      ),
     );
   }
 }

@@ -24,7 +24,20 @@ class CategoryRepoImpl implements CategoryRepo {
       recipesResults.add(recipe);
     }
 
-    print('recipesResult length ${recipesResults.length}');
     return recipesResults;
+  }
+
+  @override
+  Future<void> favoriteRecipeAction(
+      String action, recipeId, String userId) async {
+    if (action == 'add') {
+      await _firebaseFirestore.collection('users').doc(userId).update({
+        'favorites': FieldValue.arrayUnion([recipeId])
+      });
+    } else {
+      await _firebaseFirestore.collection('users').doc(userId).update({
+        'favorites': FieldValue.arrayRemove([recipeId])
+      });
+    }
   }
 }

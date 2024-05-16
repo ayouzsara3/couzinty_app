@@ -7,6 +7,8 @@ import 'package:couzinty/features/auth/presentation/viewmodel/signin_cubit/signi
 import 'package:couzinty/features/auth/presentation/viewmodel/signup/signup_cubit.dart';
 import 'package:couzinty/features/categories/data/repos/category_repo_impl.dart';
 import 'package:couzinty/features/categories/presentation/viewmodel/fetch_recipes_by_category_cubit/fetch_recipes_by_category_cubit.dart';
+import 'package:couzinty/features/favorites/data/repos/favorites_repo_impl.dart';
+import 'package:couzinty/features/favorites/presentation/viewmodel/fetch_favorite_recipes_cubit/fetch_favorite_recipes_cubit.dart';
 import 'package:couzinty/features/profile/presentation/views/viewmodel/user_cubit/user_cubit.dart';
 
 import 'package:couzinty/firebase_options.dart';
@@ -49,6 +51,11 @@ void main() async {
         BlocProvider<FetchRecipesByCategoryCubit>(
           create: (context) =>
               FetchRecipesByCategoryCubit(getIt<CategoryRepoImpl>()),
+        ),
+
+        BlocProvider<FetchFavoriteRecipesCubit>(
+          create: (context) =>
+              FetchFavoriteRecipesCubit(getIt<FavoritesRepoImpl>()),
         )
         // Add more BlocProviders here if needed
       ],

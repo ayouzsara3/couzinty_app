@@ -2,10 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:couzinty/core/utils/app_router.dart';
 import 'package:couzinty/features/auth/presentation/viewmodel/signin_cubit/signin_cubit.dart';
 import 'package:couzinty/features/profile/data/repos/profile_repo.dart';
-import 'package:couzinty/features/profile/presentation/views/viewmodel/user_cubit/user_cubit.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
 class ProfileRepoImpl implements ProfileRepo {

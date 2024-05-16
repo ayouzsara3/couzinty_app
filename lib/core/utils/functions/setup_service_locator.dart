@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:couzinty/features/auth/data/repos/auth_repo_impl.dart';
 import 'package:couzinty/features/auth/data/services/firestore_services.dart';
 import 'package:couzinty/features/categories/data/repos/category_repo_impl.dart';
+import 'package:couzinty/features/favorites/data/repos/favorites_repo_impl.dart';
 import 'package:couzinty/features/profile/data/repos/profile_repo_impl.dart';
 import 'package:couzinty/features/recipes_review/data/repos/recipes_review_repo_impl.dart';
 import 'package:couzinty/features/search/data/repos/search_repo_impl.dart';
@@ -51,4 +52,7 @@ Future<void> setupServiceLocator() async {
 
   final categoryRepo = CategoryRepoImpl(firestore);
   GetIt.I.registerLazySingleton(() => categoryRepo);
+
+  final favoritesRepo = FavoritesRepoImpl(firebaseFirestore: firestore);
+  GetIt.I.registerLazySingleton(() => favoritesRepo);
 }

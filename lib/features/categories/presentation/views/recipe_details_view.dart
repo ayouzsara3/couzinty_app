@@ -3,15 +3,38 @@ import 'dart:ui';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:couzinty/core/utils/app_styles.dart';
 import 'package:couzinty/core/utils/constants.dart';
+import 'package:couzinty/core/utils/functions/setup_service_locator.dart';
+import 'package:couzinty/features/categories/data/repos/category_repo.dart';
+import 'package:couzinty/features/categories/data/repos/category_repo_impl.dart';
+import 'package:couzinty/features/profile/presentation/views/viewmodel/user_cubit/user_cubit.dart';
 import 'package:couzinty/features/upload/data/models/recipe_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
-class RecipeDetailsView extends StatelessWidget {
+class RecipeDetailsView extends StatefulWidget {
   const RecipeDetailsView({super.key, required this.recipe});
 
   final RecipeModel recipe;
+
+  @override
+  State<RecipeDetailsView> createState() => _RecipeDetailsViewState();
+}
+
+class _RecipeDetailsViewState extends State<RecipeDetailsView> {
+  late bool isFav;
+  late String userId;
+  bool isFavorite() {
+    return context.read<UserCubit>().state.favorites.contains(widget.recipe.id);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    isFav = isFavorite();
+    userId = context.read<UserCubit>().state.id;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -22,9 +45,9 @@ class RecipeDetailsView extends StatelessWidget {
           SizedBox(
             width: double.infinity,
             child: Hero(
-              tag: recipe.name,
+              tag: widget.recipe.name,
               child: CachedNetworkImage(
-                imageUrl: recipe.image,
+                imageUrl: widget.recipe.image,
                 fit: BoxFit.fitWidth,
               ),
             ),
@@ -100,8 +123,29 @@ class RecipeDetailsView extends StatelessWidget {
           ),
           const SizedBox(width: 16),
           InkWell(
-            onTap: () {
-              Navigator.pop(context);
+            onTap: () async {
+              try {
+                if (!isFav) {
+                  await getIt<CategoryRepoImpl>()
+                      .favoriteRecipeAction('add', widget.recipe.id, userId);
+                } else {
+                  await getIt<CategoryRepoImpl>()
+                      .favoriteRecipeAction('remove', widget.recipe.id, userId);
+                }
+
+                if (!context.mounted) {
+                  return;
+                }
+                context
+                    .read<UserCubit>()
+                    .updateUser(recipeId: widget.recipe.id);
+
+                setState(() {
+                  isFav = !isFav;
+                });
+              } catch (e) {
+                print(e);
+              }
             },
             child: Container(
               clipBehavior: Clip.hardEdge,
@@ -118,10 +162,20 @@ class RecipeDetailsView extends StatelessWidget {
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(25),
                   ),
-                  child: const Icon(
-                    CupertinoIcons.heart_fill,
-                    size: 20,
-                    color: Colors.white,
+                  child: AnimatedSwitcher(
+                    duration: const Duration(milliseconds: 300),
+                    transitionBuilder: (child, animation) {
+                      return ScaleTransition(
+                        scale: Tween(begin: 0.0, end: 1.0).animate(animation),
+                        child: child,
+                      );
+                    },
+                    child: Icon(
+                      CupertinoIcons.heart_fill,
+                      size: 20,
+                      color: !isFav ? Colors.white : kMainGreen,
+                      key: ValueKey(isFav),
+                    ),
                   ),
                 ),
               ),
@@ -164,7 +218,7 @@ class RecipeDetailsView extends StatelessWidget {
                       ],
                     ),
                   ),
-                  Text(recipe.name,
+                  Text(widget.recipe.name,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: AppStyles.styleBold22(context)),
@@ -174,7 +228,7 @@ class RecipeDetailsView extends StatelessWidget {
                   Row(
                     children: [
                       Text(
-                        recipe.category,
+                        widget.recipe.category,
                         style: AppStyles.styleMedium17(context),
                       ),
                       const Spacer(),
@@ -187,7 +241,7 @@ class RecipeDetailsView extends StatelessWidget {
                         },
                         itemSize: 24,
                         itemCount: 5,
-                        rating: recipe.rate,
+                        rating: widget.recipe.rate,
                       ),
                     ],
                   ),
@@ -220,9 +274,9 @@ class RecipeDetailsView extends StatelessWidget {
                             ),
                             const SizedBox(height: 5),
                             Text(
-                              recipe.personsNumber == 1
-                                  ? '${recipe.personsNumber} Personne'
-                                  : '${recipe.personsNumber} Personnes',
+                              widget.recipe.personsNumber == 1
+                                  ? '${widget.recipe.personsNumber} Personne'
+                                  : '${widget.recipe.personsNumber} Personnes',
                               style: AppStyles.styleBold15(context),
                             ),
                           ],
@@ -236,7 +290,7 @@ class RecipeDetailsView extends StatelessWidget {
                             ),
                             const SizedBox(height: 5),
                             Text(
-                              '${recipe.cookingTime} Minutes',
+                              '${widget.recipe.cookingTime} Minutes',
                               style: AppStyles.styleBold15(context),
                             ),
                           ],
@@ -250,7 +304,7 @@ class RecipeDetailsView extends StatelessWidget {
                             ),
                             const SizedBox(height: 5),
                             Text(
-                              recipe.difficulty,
+                              widget.recipe.difficulty,
                               style: AppStyles.styleBold15(context),
                             ),
                           ],
@@ -278,9 +332,9 @@ class RecipeDetailsView extends StatelessWidget {
                   ListView.builder(
                     physics: const NeverScrollableScrollPhysics(),
                     shrinkWrap: true,
-                    itemCount: recipe.ingredients.length,
+                    itemCount: widget.recipe.ingredients.length,
                     itemBuilder: (context, index) =>
-                        ingredients(context, recipe.ingredients[index]),
+                        ingredients(context, widget.recipe.ingredients[index]),
                   ),
                   const Padding(
                     padding: EdgeInsets.symmetric(vertical: 15),
@@ -299,9 +353,9 @@ class RecipeDetailsView extends StatelessWidget {
                   ListView.builder(
                     physics: const NeverScrollableScrollPhysics(),
                     shrinkWrap: true,
-                    itemCount: recipe.instructions.length,
-                    itemBuilder: (context, index) =>
-                        steps(context, index, recipe.instructions[index]),
+                    itemCount: widget.recipe.instructions.length,
+                    itemBuilder: (context, index) => steps(
+                        context, index, widget.recipe.instructions[index]),
                   ),
                 ],
               ),

@@ -19,7 +19,15 @@ class UserModel {
   UserModel copyWith({
     String? userName,
     String? image,
+    String? recipeId,
   }) {
+    if (recipeId != null) {
+      if (favorites.contains(recipeId)) {
+        favorites.remove(recipeId);
+      } else {
+        favorites.add(recipeId);
+      }
+    }
     return UserModel(
       id: id,
       email: email,
