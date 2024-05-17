@@ -3,6 +3,8 @@ import 'package:couzinty/core/utils/functions/setup_service_locator.dart';
 import 'package:couzinty/core/utils/size_config.dart';
 import 'package:couzinty/features/auth/data/models/user_model.dart';
 import 'package:couzinty/features/auth/data/services/firestore_services.dart';
+import 'package:couzinty/features/onboarding/presentation/viewmodel/onboarding_cubit/onboarding_cubit.dart';
+import 'package:couzinty/features/onboarding/presentation/viewmodel/onboarding_cubit/onboarding_states.dart';
 import 'package:couzinty/features/profile/presentation/views/viewmodel/user_cubit/user_cubit.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -22,7 +24,6 @@ class _SplashViewBodyState extends State<SplashViewBody> {
   @override
   void initState() {
     super.initState();
-    navigateToNextPage();
   }
 
   Future<bool> _isLoggedIn() async {
@@ -44,9 +45,9 @@ class _SplashViewBodyState extends State<SplashViewBody> {
         GoRouter.of(context).pushReplacement(AppRouter.kRecipesReviewView);
       }
     } else {
-      Future.delayed(const Duration(seconds: 2), () {});
-
-      GoRouter.of(context).pushReplacement(AppRouter.kSignInView);
+      Future.delayed(const Duration(seconds: 2), () {
+        GoRouter.of(context).pushReplacement(AppRouter.kSignInView);
+      });
     }
   }
 
@@ -66,22 +67,33 @@ class _SplashViewBodyState extends State<SplashViewBody> {
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
-    return Stack(
-      children: [
-        Opacity(
-          opacity: 0.1,
-          child: Image.asset(
-            'assets/images/background_image.png',
-            height: double.infinity,
-            width: double.infinity,
-            fit: BoxFit.fill,
+    return BlocListener<OnboardingCubit, OnboardingState>(
+      listener: (context, state) {
+        if (state is OnboardingShown) {
+          navigateToNextPage();
+        } else if (state is OnboardingNotShown) {
+          Future.delayed(const Duration(seconds: 2), () {
+            GoRouter.of(context).pushReplacement(AppRouter.kOnboardingView);
+          });
+        }
+      },
+      child: Stack(
+        children: [
+          Opacity(
+            opacity: 0.1,
+            child: Image.asset(
+              'assets/images/background_image.png',
+              height: double.infinity,
+              width: double.infinity,
+              fit: BoxFit.fill,
+            ),
           ),
-        ),
-        Image.asset(
-          'assets/images/logo-2.png',
-          height: 500,
-        ),
-      ],
+          Image.asset(
+            'assets/images/logo-2.png',
+            height: 500,
+          ),
+        ],
+      ),
     );
   }
 }

@@ -1,6 +1,8 @@
 import 'package:couzinty/core/utils/app_router.dart';
 import 'package:couzinty/core/utils/constants.dart';
+import 'package:couzinty/features/onboarding/presentation/viewmodel/onboarding_cubit/onboarding_cubit.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_onboarding_slider/flutter_onboarding_slider.dart';
 import 'package:go_router/go_router.dart';
 
@@ -16,6 +18,7 @@ class OnBoardingViewBody extends StatelessWidget {
 
     return OnBoardingSlider(
       onFinish: () {
+        context.read<OnboardingCubit>().setOnboardingShown();
         GoRouter.of(context).pushReplacement(AppRouter.kSignUpView);
       },
       finishButtonText: 'Commencer',
