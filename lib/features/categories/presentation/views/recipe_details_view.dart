@@ -36,19 +36,12 @@ class _RecipeDetailsViewState extends State<RecipeDetailsView> {
   bool isInShoppingList() {
     final shoppingList = context.read<UserCubit>().state.shoppingList;
     final recipeIngredient = widget.recipe.ingredients;
-    print('shoopingList $shoppingList');
-    print('recipeIngredient $recipeIngredient');
-    print('isequal ${arraysEqual(shoppingList!, recipeIngredient)}');
-    return arraysEqual(shoppingList, recipeIngredient);
+    return arraysEqual(shoppingList!, recipeIngredient);
   }
 
   onClickShoppingList() async {
     final isEmptyShoppingList =
         context.read<UserCubit>().state.shoppingList!.isEmpty;
-    final shoppingList = context.read<UserCubit>().state.shoppingList;
-    final recipeIngredient = widget.recipe.ingredients;
-    print('shoopingList $shoppingList');
-    print('recipeIngredient $recipeIngredient');
 
     try {
       if (isEmptyShoppingList) {
@@ -58,6 +51,9 @@ class _RecipeDetailsViewState extends State<RecipeDetailsView> {
         context
             .read<UserCubit>()
             .updateUser(shoppingList: widget.recipe.ingredients);
+        setState(() {
+          isList = !isList;
+        });
       } else if (!isEmptyShoppingList && !isList) {
         QuickAlert.show(
           context: context,
@@ -79,6 +75,10 @@ class _RecipeDetailsViewState extends State<RecipeDetailsView> {
                 .read<UserCubit>()
                 .updateUser(shoppingList: widget.recipe.ingredients);
 
+            setState(() {
+              isList = !isList;
+            });
+
             Navigator.of(context).pop();
           },
         );
@@ -87,11 +87,11 @@ class _RecipeDetailsViewState extends State<RecipeDetailsView> {
             .shoppingListAction('remove', widget.recipe.ingredients, userId);
 
         context.read<UserCubit>().updateUser(shoppingList: []);
-      }
 
-      setState(() {
-        isList = !isList;
-      });
+        setState(() {
+          isList = !isList;
+        });
+      }
     } catch (e) {
       print(e);
     }

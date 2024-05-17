@@ -174,7 +174,7 @@ class _UploadViewBodyState extends State<UploadViewBody> {
                         height: 20,
                       ),
                       Text(
-                        "Rate",
+                        "Evaluation",
                         style: AppStyles.styleBold17(context),
                       ),
                       const SizedBox(

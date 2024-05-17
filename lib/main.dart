@@ -12,6 +12,8 @@ import 'package:couzinty/features/favorites/presentation/viewmodel/fetch_favorit
 import 'package:couzinty/features/home/data/repos/home_repo_impl.dart';
 import 'package:couzinty/features/home/presentation/viewmodel/fetch_slider_recipes_cubit/fetch_slider_recipes_cubit.dart';
 import 'package:couzinty/features/profile/presentation/views/viewmodel/user_cubit/user_cubit.dart';
+import 'package:couzinty/features/shopping_list/data/repos/shopping_list_repo_impl.dart';
+import 'package:couzinty/features/shopping_list/presentation/viewmodel/cubit/shopping_list_cubit.dart';
 
 import 'package:couzinty/firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -62,6 +64,10 @@ void main() async {
 
         BlocProvider<FetchSliderRecipesCubit>(
           create: (context) => FetchSliderRecipesCubit(getIt<HomeRepoImpl>()),
+        ),
+
+        BlocProvider<ShoppingListCubit>(
+          create: (context) => ShoppingListCubit(getIt<ShoppingListRepoImpl>()),
         )
         // Add more BlocProviders here if needed
       ],

@@ -14,29 +14,54 @@ class RecipesReviewRepoImpl implements RecipesReviewRepo {
       : _firebaseFirestore = firebaseFirestore;
 
   @override
-  Stream<List<RecipeModel>> fetchPendingRecipes() {
-    // Create a StreamController to manage the stream
-    StreamController<List<RecipeModel>> controller =
-        StreamController<List<RecipeModel>>();
+  Stream<List<RecipeModel>> fetchRecipes(String mode) {
+    if (mode == 'pending') {
+      // Create a StreamController to manage the stream
+      StreamController<List<RecipeModel>> controller =
+          StreamController<List<RecipeModel>>();
 
-    _firebaseFirestore
-        .collection('recipes')
-        .where('isAccepted', isEqualTo: false)
-        .snapshots()
-        .listen((snapshot) {
-      List<RecipeModel> pendingRecipes = [];
+      _firebaseFirestore
+          .collection('recipes')
+          .where('isAccepted', isEqualTo: false)
+          .snapshots()
+          .listen((snapshot) {
+        List<RecipeModel> pendingRecipes = [];
 
-      for (var doc in snapshot.docs) {
-        Map<String, dynamic> data = doc.data();
-        RecipeModel recipe = RecipeModel.fromJson(data);
-        recipe.id = doc.id;
-        pendingRecipes.add(recipe);
-      }
+        for (var doc in snapshot.docs) {
+          Map<String, dynamic> data = doc.data();
+          RecipeModel recipe = RecipeModel.fromJson(data);
+          recipe.id = doc.id;
+          pendingRecipes.add(recipe);
+        }
 
-      controller.add(pendingRecipes);
-    });
+        controller.add(pendingRecipes);
+      });
 
-    return controller.stream;
+      return controller.stream;
+    } else {
+      // Create a StreamController to manage the stream
+      StreamController<List<RecipeModel>> controller =
+          StreamController<List<RecipeModel>>();
+
+      _firebaseFirestore
+          .collection('recipes')
+          .where('isAccepted', isEqualTo: true)
+          .snapshots()
+          .listen((snapshot) {
+        List<RecipeModel> pendingRecipes = [];
+
+        for (var doc in snapshot.docs) {
+          Map<String, dynamic> data = doc.data();
+          RecipeModel recipe = RecipeModel.fromJson(data);
+          recipe.id = doc.id;
+          pendingRecipes.add(recipe);
+        }
+
+        controller.add(pendingRecipes);
+      });
+
+      return controller.stream;
+    }
   }
 
   @override

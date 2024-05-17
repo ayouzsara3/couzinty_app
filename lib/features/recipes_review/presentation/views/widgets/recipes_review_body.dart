@@ -1,8 +1,9 @@
 import 'package:couzinty/core/utils/constants.dart';
+import 'package:couzinty/core/utils/size_config.dart';
 import 'package:couzinty/core/utils/widgets/custom_loading_indicator.dart';
 import 'package:couzinty/features/categories/presentation/views/widgets/recipe_card.dart';
-import 'package:couzinty/features/recipes_review/presentation/viewmodel/fetch_pending_recipes/fetchpendingrecipes_cubit.dart';
-import 'package:couzinty/features/recipes_review/presentation/viewmodel/fetch_pending_recipes/fetchpendingrecipes_state.dart';
+import 'package:couzinty/features/recipes_review/presentation/viewmodel/fetch_recipes/fetch_recipes_cubit.dart';
+import 'package:couzinty/features/recipes_review/presentation/viewmodel/fetch_recipes/fetch_recipes_state.dart';
 import 'package:couzinty/features/recipes_review/presentation/viewmodel/recipe_action_cubit/recipe_action_cubit.dart';
 import 'package:couzinty/features/upload/data/models/recipe_model.dart';
 import 'package:flutter/cupertino.dart';
@@ -17,38 +18,81 @@ class RecipesReviewBody extends StatefulWidget {
 }
 
 class _RecipesReviewBodyState extends State<RecipesReviewBody> {
+  var _selectedTab = 1;
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    context.read<FetchPendingRecipesCubit>().fetchPendingRecipes();
+    context.read<FetchRecipesCubit>().fetchPendingRecipes('pending');
   }
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20),
-      child: BlocBuilder<FetchPendingRecipesCubit, FetchPendingRecipesState>(
-        builder: (context, state) {
-          if (state is FetchPendingRecipesError) {
-            return Center(
-              child: Text("Erreur: ${state.message}"),
-            );
-          } else if (state is FetchPendingRecipesSuccess) {
-            if (state.recipes.isEmpty) {
-              return const Center(
-                child: Text('aucune recette trouvée'),
-              );
-            } else {
-              print('tool ${state.recipes.length}');
-              return _buildPendingRecipesResult(state.recipes);
-            }
-          } else {
-            return const Center(
-              child: CustomLoadingIncicator(),
-            );
-          }
-        },
+      child: Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              TextButton(
+                  onPressed: () {
+                    setState(() {
+                      _selectedTab = 1;
+                      context
+                          .read<FetchRecipesCubit>()
+                          .fetchPendingRecipes('pending');
+                    });
+                  },
+                  child: Text('En attente',
+                      style: TextStyle(
+                          color: _selectedTab == 1 ? kDarkBlue : kLightBlue,
+                          fontSize: 18,
+                          fontWeight: FontWeight.w600))),
+              SizedBox(width: SizeConfig.defaultSize),
+              TextButton(
+                onPressed: () {
+                  setState(() {
+                    _selectedTab = 2;
+                    context
+                        .read<FetchRecipesCubit>()
+                        .fetchPendingRecipes('accepted');
+                  });
+                },
+                child: Text('Accepté',
+                    style: TextStyle(
+                        color: _selectedTab == 2 ? kDarkBlue : kLightBlue,
+                        fontSize: 18,
+                        fontWeight: FontWeight.w600)),
+              ),
+            ],
+          ),
+          SizedBox(width: SizeConfig.defaultSize! * 5),
+          Expanded(
+            child: BlocBuilder<FetchRecipesCubit, FetchRecipesState>(
+              builder: (context, state) {
+                if (state is FetchRecipesError) {
+                  return Center(
+                    child: Text("Erreur: ${state.message}"),
+                  );
+                } else if (state is FetchRecipesSuccess) {
+                  if (state.recipes.isEmpty) {
+                    return const Center(
+                      child: Text('aucune recette trouvée'),
+                    );
+                  } else {
+                    return _buildPendingRecipesResult(state.recipes);
+                  }
+                } else {
+                  return const Center(
+                    child: CustomLoadingIncicator(),
+                  );
+                }
+              },
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -58,18 +102,20 @@ class _RecipesReviewBodyState extends State<RecipesReviewBody> {
       itemCount: recipes.length,
       itemBuilder: (context, index) {
         return Dismissible(
-          secondaryBackground: Container(
-            color: kMainGreen,
-            alignment: Alignment.centerRight,
-            child: const Padding(
-              padding: EdgeInsets.only(right: 20),
-              child: Icon(
-                CupertinoIcons.check_mark,
-                color: Colors.white,
-                size: 32,
-              ),
-            ),
-          ),
+          secondaryBackground: _selectedTab == 2
+              ? null
+              : Container(
+                  color: kMainGreen,
+                  alignment: Alignment.centerRight,
+                  child: const Padding(
+                    padding: EdgeInsets.only(right: 20),
+                    child: Icon(
+                      CupertinoIcons.check_mark,
+                      color: Colors.white,
+                      size: 32,
+                    ),
+                  ),
+                ),
           background: Container(
             color: Colors.redAccent,
             alignment: Alignment.centerLeft,
@@ -83,12 +129,15 @@ class _RecipesReviewBodyState extends State<RecipesReviewBody> {
             ),
           ),
           key: GlobalKey(),
-          // direction: DismissDirection.endToStart,
+          direction: _selectedTab == 2
+              ? DismissDirection.startToEnd
+              : DismissDirection.horizontal,
           onDismissed: (direction) async {
             if (direction == DismissDirection.startToEnd) {
               await context.read<RecipeActionCubit>().performRecipeAction(
                   action: 'delete', recipeId: recipes[index].id);
-            } else {
+            } else if (direction == DismissDirection.endToStart &&
+                _selectedTab != 2) {
               await context.read<RecipeActionCubit>().performRecipeAction(
                   action: 'accept', recipeId: recipes[index].id);
             }

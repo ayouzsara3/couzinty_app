@@ -3,7 +3,7 @@ import 'package:couzinty/core/utils/constants.dart';
 import 'package:couzinty/core/utils/functions/setup_service_locator.dart';
 import 'package:couzinty/features/auth/presentation/viewmodel/signin_cubit/signin_cubit.dart';
 import 'package:couzinty/features/recipes_review/data/repos/recipes_review_repo_impl.dart';
-import 'package:couzinty/features/recipes_review/presentation/viewmodel/fetch_pending_recipes/fetchpendingrecipes_cubit.dart';
+import 'package:couzinty/features/recipes_review/presentation/viewmodel/fetch_recipes/fetch_recipes_cubit.dart';
 import 'package:couzinty/features/recipes_review/presentation/viewmodel/recipe_action_cubit/recipe_action_cubit.dart';
 import 'package:couzinty/features/recipes_review/presentation/views/widgets/recipes_review_body.dart';
 import 'package:flutter/material.dart';
@@ -17,9 +17,9 @@ class RecipesReviewView extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider<FetchPendingRecipesCubit>(
+        BlocProvider<FetchRecipesCubit>(
             create: (context) =>
-                FetchPendingRecipesCubit(getIt<RecipesReviewRepoImpl>())),
+                FetchRecipesCubit(getIt<RecipesReviewRepoImpl>())),
         BlocProvider<RecipeActionCubit>(
             create: (context) =>
                 RecipeActionCubit(getIt<RecipesReviewRepoImpl>())),
