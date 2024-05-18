@@ -6,17 +6,19 @@ class UploadCubit extends Cubit<UploadState> {
   UploadCubit(this.uploadRepo) : super(UploadInitial());
   final UploadRepo uploadRepo;
 
-  Future<void> uploadRecipe(
-      {required name,
-      required image,
-      required category,
-      required difficulty,
-      required cookingTime,
-      required ingredients,
-      required instructions,
-      required rate,
-      required personsNumber,
-      required userRole}) async {
+  Future<void> uploadRecipe({
+    required name,
+    required image,
+    required category,
+    required difficulty,
+    required cookingTime,
+    required ingredients,
+    required instructions,
+    required rate,
+    required personsNumber,
+    required userRole,
+    required userId,
+  }) async {
     emit(UploadLoading());
     try {
       await uploadRepo.uploadRecipe(
@@ -29,7 +31,8 @@ class UploadCubit extends Cubit<UploadState> {
           instructions: ingredients,
           personsNumber: personsNumber,
           rate: rate,
-          userRole: userRole);
+          userRole: userRole,
+          userId: userId);
 
       emit(UploadSuccess());
     } catch (e) {

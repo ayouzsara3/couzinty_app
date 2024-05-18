@@ -1,7 +1,5 @@
 import 'dart:io';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:couzinty/core/utils/app_router.dart';
 import 'package:couzinty/core/utils/app_styles.dart';
 import 'package:couzinty/core/utils/constants.dart';
 import 'package:couzinty/core/utils/size_config.dart';
@@ -22,7 +20,6 @@ import 'package:couzinty/features/upload/presentation/views/widgets/upload_custo
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinner_item_selector/flutter_spinner_item_selector.dart';
-import 'package:go_router/go_router.dart';
 
 class UploadViewBody extends StatefulWidget {
   const UploadViewBody({super.key});
@@ -201,6 +198,7 @@ class _UploadViewBodyState extends State<UploadViewBody> {
                           _formKey.currentState!.save();
 
                           final userRole = context.read<UserCubit>().state.role;
+                          final userId = context.read<UserCubit>().state.id;
 
                           await context.read<UploadCubit>().uploadRecipe(
                               name: recipeName,
@@ -212,7 +210,8 @@ class _UploadViewBodyState extends State<UploadViewBody> {
                               instructions: instructions,
                               personsNumber: int.tryParse(personsNumber.data!),
                               rate: selectedRate,
-                              userRole: userRole);
+                              userRole: userRole,
+                              userId: userId);
                         },
                         text: "Ajouter",
                         fontSize: 18,

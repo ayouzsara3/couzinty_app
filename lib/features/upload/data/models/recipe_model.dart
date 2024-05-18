@@ -10,8 +10,10 @@ class RecipeModel {
   final double rate;
   final int personsNumber;
   final bool isAccepted;
+  final String userId;
 
   RecipeModel({
+    required this.userId,
     required this.id,
     required this.name,
     required this.image,
@@ -28,6 +30,7 @@ class RecipeModel {
   factory RecipeModel.fromJson(Map<String, dynamic> json) {
     return RecipeModel(
       id: json['id'].toString(),
+      userId: json['userId'].toString(),
       name: json['name'].toString(),
       image: json['image'].toString(),
       category: json['category'].toString(),

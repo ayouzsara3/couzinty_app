@@ -1,17 +1,12 @@
-import 'package:couzinty/core/utils/app_router.dart';
 import 'package:couzinty/core/utils/constants.dart';
-import 'package:couzinty/core/utils/functions/setup_service_locator.dart';
 import 'package:couzinty/core/utils/widgets/custom_loading_indicator.dart';
 import 'package:couzinty/features/categories/presentation/views/widgets/recipe_card.dart';
+import 'package:couzinty/features/home/presentation/viewmodel/suggestion_recipes/suggestion_recipes_cubit.dart';
 import 'package:couzinty/features/home/presentation/views/widgets/custom_text_form_field.dart';
-import 'package:couzinty/features/search/data/repos/search_repo_impl.dart';
 import 'package:couzinty/features/search/presentation/viewmodel/cubit/search_cubit.dart';
 import 'package:couzinty/features/upload/data/models/recipe_model.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
 
 class SearchViewBody extends StatefulWidget {
   const SearchViewBody({super.key});
@@ -61,7 +56,6 @@ class _SearchViewBodyState extends State<SearchViewBody> {
                       onChanged: (query) {
                         context.read<SearchCubit>().search(query);
                       },
-                      onEditingComplete: () {},
                     ),
                   ),
                 ],
@@ -84,6 +78,9 @@ class _SearchViewBodyState extends State<SearchViewBody> {
                         child: Text('aucune recette trouvée'),
                       );
                     } else {
+                      context
+                          .read<SuggestionRecipesCubit>()
+                          .setSearchResults(state.recipes);
                       return _buildSearchResults(state.recipes);
                     }
                   } else if (state is SearchError) {

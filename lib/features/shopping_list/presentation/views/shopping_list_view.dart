@@ -6,7 +6,6 @@ import 'package:couzinty/features/categories/data/repos/category_repo_impl.dart'
 import 'package:couzinty/features/profile/presentation/views/viewmodel/user_cubit/user_cubit.dart';
 import 'package:couzinty/features/shopping_list/presentation/viewmodel/cubit/shopping_list_cubit.dart';
 import 'package:couzinty/features/shopping_list/presentation/viewmodel/cubit/shopping_list_state.dart';
-import 'package:couzinty/features/shopping_list/presentation/views/widgets/ingredient_card.dart';
 import 'package:couzinty/features/shopping_list/presentation/views/widgets/shopping_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

@@ -1,8 +1,8 @@
 import 'package:couzinty/core/utils/app_styles.dart';
-import 'package:couzinty/core/utils/functions/setup_service_locator.dart';
 import 'package:couzinty/core/utils/size_config.dart';
-import 'package:couzinty/features/home/data/repos/home_repo_impl.dart';
 import 'package:couzinty/features/home/presentation/viewmodel/fetch_slider_recipes_cubit/fetch_slider_recipes_cubit.dart';
+import 'package:couzinty/features/home/presentation/viewmodel/suggestion_recipes/suggestion_recipes_cubit.dart';
+import 'package:couzinty/features/home/presentation/viewmodel/suggestion_recipes/suggestion_recipes_state.dart';
 import 'package:couzinty/features/home/presentation/views/widgets/custom_text_form_field.dart';
 import 'package:couzinty/features/home/presentation/views/widgets/home_custom_slider.dart';
 import 'package:couzinty/features/home/presentation/views/widgets/custom_grid.dart';
@@ -10,7 +10,6 @@ import 'package:couzinty/features/profile/presentation/views/viewmodel/user_cubi
 import 'package:couzinty/features/search/presentation/views/search_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:shimmer/shimmer.dart';
 
 class HomeView extends StatefulWidget {
   const HomeView({super.key});
@@ -22,9 +21,14 @@ class HomeView extends StatefulWidget {
 class _HomeViewState extends State<HomeView> {
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     context.read<FetchSliderRecipesCubit>().fetchSliderRecipes();
+    final suggestionRecipesCubit = context.read<SuggestionRecipesCubit>();
+
+    // Check if searchResults are empty
+    if (suggestionRecipesCubit.state is! SuggestionRecipesSuccess) {
+      suggestionRecipesCubit.fetchRandomRecipes();
+    }
   }
 
   @override
@@ -32,10 +36,6 @@ class _HomeViewState extends State<HomeView> {
     final userName = context.read<UserCubit>().state.userName;
     return SingleChildScrollView(
       child: SafeArea(
-        // child: Shimmer.fromColors(
-        // baseColor: Colors.grey.shade300,
-        // highlightColor: Colors.yellow,
-
         child: Column(
           children: [
             Stack(
@@ -53,10 +53,12 @@ class _HomeViewState extends State<HomeView> {
                     const SizedBox(height: 16),
                     Padding(
                       padding: const EdgeInsets.all(10),
-                      child: Text('Bienvenue $userName 👋',
-                          textAlign: TextAlign.start,
-                          style: AppStyles.styleBold22(context)
-                              .copyWith(color: Colors.black87)),
+                      child: Text(
+                        'Bienvenue $userName 👋',
+                        textAlign: TextAlign.start,
+                        style: AppStyles.styleBold22(context)
+                            .copyWith(color: Colors.black87),
+                      ),
                     ),
                     SizedBox(height: SizeConfig.defaultSize! * 3),
                     const HomeCustomSlider(),

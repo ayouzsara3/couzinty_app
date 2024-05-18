@@ -10,17 +10,19 @@ class UploadRepoImpl implements UploadRepo {
       {required FirebaseFirestore firestore})
       : _firestore = firestore;
   @override
-  Future<void> uploadRecipe(
-      {required name,
-      required image,
-      required category,
-      required difficulty,
-      required cookingTime,
-      required ingredients,
-      required instructions,
-      required rate,
-      required personsNumber,
-      required userRole}) async {
+  Future<void> uploadRecipe({
+    required name,
+    required image,
+    required category,
+    required difficulty,
+    required cookingTime,
+    required ingredients,
+    required instructions,
+    required rate,
+    required personsNumber,
+    required userRole,
+    required userId,
+  }) async {
     DocumentReference recipeRef = await _firestore.collection('recipes').add({
       'name': name,
       'image': '',
@@ -32,6 +34,7 @@ class UploadRepoImpl implements UploadRepo {
       'rate': rate,
       'personsNumber': personsNumber,
       'isAccepted': userRole == 'admin' ? true : false,
+      'userId': userId,
     });
 
     // save image into firebase Storage

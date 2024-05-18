@@ -2,6 +2,7 @@ import 'package:couzinty/core/utils/constants.dart';
 import 'package:couzinty/core/utils/size_config.dart';
 import 'package:couzinty/core/utils/widgets/custom_loading_indicator.dart';
 import 'package:couzinty/features/categories/presentation/views/widgets/recipe_card.dart';
+import 'package:couzinty/features/profile/presentation/views/viewmodel/user_cubit/user_cubit.dart';
 import 'package:couzinty/features/recipes_review/presentation/viewmodel/fetch_recipes/fetch_recipes_cubit.dart';
 import 'package:couzinty/features/recipes_review/presentation/viewmodel/fetch_recipes/fetch_recipes_state.dart';
 import 'package:couzinty/features/recipes_review/presentation/viewmodel/recipe_action_cubit/recipe_action_cubit.dart';
@@ -19,12 +20,12 @@ class RecipesReviewBody extends StatefulWidget {
 
 class _RecipesReviewBodyState extends State<RecipesReviewBody> {
   var _selectedTab = 1;
-
+  late String userId;
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-    context.read<FetchRecipesCubit>().fetchPendingRecipes('pending');
+    userId = context.read<UserCubit>().state.id;
+    context.read<FetchRecipesCubit>().fetchPendingRecipes('pending', userId);
   }
 
   @override
@@ -42,7 +43,7 @@ class _RecipesReviewBodyState extends State<RecipesReviewBody> {
                       _selectedTab = 1;
                       context
                           .read<FetchRecipesCubit>()
-                          .fetchPendingRecipes('pending');
+                          .fetchPendingRecipes('pending', userId);
                     });
                   },
                   child: Text('En attente',
@@ -57,12 +58,28 @@ class _RecipesReviewBodyState extends State<RecipesReviewBody> {
                     _selectedTab = 2;
                     context
                         .read<FetchRecipesCubit>()
-                        .fetchPendingRecipes('accepted');
+                        .fetchPendingRecipes('accepted', userId);
                   });
                 },
                 child: Text('Accepté',
                     style: TextStyle(
                         color: _selectedTab == 2 ? kDarkBlue : kLightBlue,
+                        fontSize: 18,
+                        fontWeight: FontWeight.w600)),
+              ),
+              SizedBox(width: SizeConfig.defaultSize),
+              TextButton(
+                onPressed: () {
+                  setState(() {
+                    _selectedTab = 3;
+                    context
+                        .read<FetchRecipesCubit>()
+                        .fetchPendingRecipes('all', userId);
+                  });
+                },
+                child: Text('Tout',
+                    style: TextStyle(
+                        color: _selectedTab == 3 ? kDarkBlue : kLightBlue,
                         fontSize: 18,
                         fontWeight: FontWeight.w600)),
               ),
@@ -102,7 +119,7 @@ class _RecipesReviewBodyState extends State<RecipesReviewBody> {
       itemCount: recipes.length,
       itemBuilder: (context, index) {
         return Dismissible(
-          secondaryBackground: _selectedTab == 2
+          secondaryBackground: _selectedTab != 1
               ? null
               : Container(
                   color: kMainGreen,
@@ -129,7 +146,7 @@ class _RecipesReviewBodyState extends State<RecipesReviewBody> {
             ),
           ),
           key: GlobalKey(),
-          direction: _selectedTab == 2
+          direction: _selectedTab != 1
               ? DismissDirection.startToEnd
               : DismissDirection.horizontal,
           onDismissed: (direction) async {

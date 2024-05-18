@@ -16,7 +16,9 @@ class _SearchScreenState extends State<SearchScreen> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider<SearchCubit>(
-      create: (context) => SearchCubit(getIt<SearchRepoImpl>()),
+      create: (context) => SearchCubit(
+        getIt<SearchRepoImpl>(),
+      ),
       child: const SafeArea(
           child: Scaffold(
         body: SearchViewBody(),

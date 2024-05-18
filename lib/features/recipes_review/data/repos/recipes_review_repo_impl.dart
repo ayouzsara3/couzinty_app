@@ -14,7 +14,7 @@ class RecipesReviewRepoImpl implements RecipesReviewRepo {
       : _firebaseFirestore = firebaseFirestore;
 
   @override
-  Stream<List<RecipeModel>> fetchRecipes(String mode) {
+  Stream<List<RecipeModel>> fetchRecipes(String mode, String userId) {
     if (mode == 'pending') {
       // Create a StreamController to manage the stream
       StreamController<List<RecipeModel>> controller =
@@ -23,6 +23,31 @@ class RecipesReviewRepoImpl implements RecipesReviewRepo {
       _firebaseFirestore
           .collection('recipes')
           .where('isAccepted', isEqualTo: false)
+          .snapshots()
+          .listen((snapshot) {
+        List<RecipeModel> pendingRecipes = [];
+
+        for (var doc in snapshot.docs) {
+          Map<String, dynamic> data = doc.data();
+          RecipeModel recipe = RecipeModel.fromJson(data);
+          recipe.id = doc.id;
+          pendingRecipes.add(recipe);
+        }
+
+        controller.add(pendingRecipes);
+      });
+
+      return controller.stream;
+    }
+    if (mode == 'accepted') {
+      // Create a StreamController to manage the stream
+      StreamController<List<RecipeModel>> controller =
+          StreamController<List<RecipeModel>>();
+
+      _firebaseFirestore
+          .collection('recipes')
+          .where('isAccepted', isEqualTo: true)
+          .where('userId', isNotEqualTo: userId)
           .snapshots()
           .listen((snapshot) {
         List<RecipeModel> pendingRecipes = [];

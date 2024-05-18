@@ -7,9 +7,9 @@ class FetchRecipesCubit extends Cubit<FetchRecipesState> {
   FetchRecipesCubit(this._recipesReviewRepo)
       : super(FetchPendingRecipesInitial());
 
-  void fetchPendingRecipes(String mode) {
+  void fetchPendingRecipes(String mode, String userId) {
     emit(FetchRecipesLoading());
-    _recipesReviewRepo.fetchRecipes(mode).listen((recipes) {
+    _recipesReviewRepo.fetchRecipes(mode, userId).listen((recipes) {
       emit(FetchRecipesSuccess(recipes));
     }, onError: (error) {
       emit(FetchRecipesError(error.toString()));

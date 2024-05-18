@@ -11,6 +11,7 @@ import 'package:couzinty/features/favorites/data/repos/favorites_repo_impl.dart'
 import 'package:couzinty/features/favorites/presentation/viewmodel/fetch_favorite_recipes_cubit/fetch_favorite_recipes_cubit.dart';
 import 'package:couzinty/features/home/data/repos/home_repo_impl.dart';
 import 'package:couzinty/features/home/presentation/viewmodel/fetch_slider_recipes_cubit/fetch_slider_recipes_cubit.dart';
+import 'package:couzinty/features/home/presentation/viewmodel/suggestion_recipes/suggestion_recipes_cubit.dart';
 import 'package:couzinty/features/onboarding/presentation/viewmodel/onboarding_cubit/onboarding_cubit.dart';
 import 'package:couzinty/features/profile/presentation/views/viewmodel/user_cubit/user_cubit.dart';
 import 'package:couzinty/features/shopping_list/data/repos/shopping_list_repo_impl.dart';
@@ -73,6 +74,10 @@ void main() async {
 
         BlocProvider<OnboardingCubit>(
           create: (context) => OnboardingCubit()..checkOnboardingStatus(),
+        ),
+
+        BlocProvider<SuggestionRecipesCubit>(
+          create: (context) => SuggestionRecipesCubit(getIt<HomeRepoImpl>()),
         )
         // Add more BlocProviders here if needed
       ],
