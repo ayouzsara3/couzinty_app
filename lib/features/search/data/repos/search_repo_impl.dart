@@ -11,12 +11,10 @@ class SearchRepoImpl implements SearchRepo {
       : _firebaseFirestore = firebaseFirestore;
 
   @override
-  Stream<List<RecipeModel>> search(String query) {
-    // Create a StreamController to manage the stream
+  Stream<List<RecipeModel>> searchByName(String query,
+      {String? category, double? cookingTime, String? difficulty}) {
     StreamController<List<RecipeModel>> controller =
         StreamController<List<RecipeModel>>();
-
-    // We use debounceTimer to avoid the huge number of requests to server
     Timer? debounceTimer;
 
     _firebaseFirestore
@@ -24,7 +22,6 @@ class SearchRepoImpl implements SearchRepo {
         .where('isAccepted', isEqualTo: true)
         .snapshots()
         .listen((snapshot) {
-      // Cancel the previous timer if it's active
       debounceTimer?.cancel();
 
       debounceTimer = Timer(const Duration(milliseconds: 500), () {
@@ -34,20 +31,48 @@ class SearchRepoImpl implements SearchRepo {
         for (var doc in snapshot.docs) {
           Map<String, dynamic> data = doc.data();
 
-          // Check if the recipe name matches the query
           if (data['name']
               .toString()
               .toLowerCase()
-              .contains(query.toLowerCase())) {
-            // If it matches, create a RecipeModel instance and add it to the search result
+              .startsWith(query.toLowerCase())) {
             RecipeModel recipe = RecipeModel.fromJson(data);
             recipe.id = doc.id;
-            _addRecipeIfNotExists(searchResults, addedRecipeIds, recipe);
+            if (_matchesFilters(recipe, category, cookingTime, difficulty)) {
+              _addRecipeIfNotExists(searchResults, addedRecipeIds, recipe);
+            }
           }
+        }
 
-          // // Check if any ingredient matches the query
+        controller.add(searchResults);
+      });
+    });
+
+    return controller.stream;
+  }
+
+  @override
+  Stream<List<RecipeModel>> searchByIngredients(String query,
+      {String? category, double? cookingTime, String? difficulty}) {
+    StreamController<List<RecipeModel>> controller =
+        StreamController<List<RecipeModel>>();
+    Timer? debounceTimer;
+
+    _firebaseFirestore
+        .collection('recipes')
+        .where('isAccepted', isEqualTo: true)
+        .snapshots()
+        .listen((snapshot) {
+      debounceTimer?.cancel();
+
+      debounceTimer = Timer(const Duration(milliseconds: 500), () {
+        List<RecipeModel> searchResults = [];
+        Set<String> addedRecipeIds = {};
+
+        for (var doc in snapshot.docs) {
+          Map<String, dynamic> data = doc.data();
           List<dynamic> ingredientsDynamic = data['ingredients'];
           List<String> ingredients = ingredientsDynamic.cast<String>();
+
           for (var ingredient in ingredients) {
             if (ingredient
                 .toString()
@@ -55,18 +80,30 @@ class SearchRepoImpl implements SearchRepo {
                 .contains(query.toLowerCase())) {
               RecipeModel recipe = RecipeModel.fromJson(data);
               recipe.id = doc.id;
-              _addRecipeIfNotExists(searchResults, addedRecipeIds, recipe);
-              break; // Break loop if any ingredient matches
+              if (_matchesFilters(recipe, category, cookingTime, difficulty)) {
+                _addRecipeIfNotExists(searchResults, addedRecipeIds, recipe);
+                break;
+              }
             }
           }
         }
 
-        // Add the search results to the stream
         controller.add(searchResults);
       });
     });
 
     return controller.stream;
+  }
+
+  bool _matchesFilters(RecipeModel recipe, String? category,
+      double? cookingTime, String? difficulty) {
+    bool matchesCategory = category == null || recipe.category == category;
+    bool matchesCookingTime =
+        cookingTime == null || recipe.cookingTime == cookingTime;
+    bool matchesDifficulty =
+        difficulty == null || recipe.difficulty == difficulty;
+
+    return matchesCategory && matchesCookingTime && matchesDifficulty;
   }
 
   void _addRecipeIfNotExists(List<RecipeModel> searchResults,

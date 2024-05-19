@@ -12,20 +12,12 @@ class CustomDurationSlider extends StatefulWidget {
 }
 
 class _CustomDurationSliderState extends State<CustomDurationSlider> {
-  double slider = 30;
+  late double slider = 30;
+
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Row(
-          children: [
-            Text("Durée de cuisson", style: AppStyles.styleBold17(context)),
-            Text("( en minutes )", style: AppStyles.styleMedium17(context)),
-          ],
-        ),
-        const SizedBox(
-          height: 20,
-        ),
         Column(
           children: [
             Padding(

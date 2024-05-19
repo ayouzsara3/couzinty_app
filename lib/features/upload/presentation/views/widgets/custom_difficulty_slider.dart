@@ -12,26 +12,25 @@ class CustomDifficultySlider extends StatefulWidget {
 }
 
 class _CustomDifficultySliderState extends State<CustomDifficultySlider> {
-  double slider = 2;
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
+  late double slider = 2;
+
+  double getsavedDifficulty(String difficulty) {
+    switch (difficulty) {
+      case 'Facile':
+        return 1;
+      case 'Moyen':
+        return 2;
+      case 'Difficile':
+        return 3;
+      default:
+        return 2;
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Row(
-          children: [
-            Text("Difficulté de cuisson",
-                style: AppStyles.styleBold17(context)),
-          ],
-        ),
-        const SizedBox(
-          height: 20,
-        ),
         Column(
           children: [
             Padding(

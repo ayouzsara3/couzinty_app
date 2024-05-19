@@ -1,8 +1,8 @@
 import 'package:couzinty/core/utils/app_styles.dart';
 import 'package:couzinty/core/utils/size_config.dart';
+import 'package:couzinty/features/home/presentation/viewmodel/suggestion_recipes_cubit.dart/suggestion_recipes_cubit.dart';
+import 'package:couzinty/features/home/presentation/viewmodel/suggestion_recipes_cubit.dart/suggestion_recipes_state.dart';
 import 'package:couzinty/features/home/presentation/viewmodel/fetch_slider_recipes_cubit/fetch_slider_recipes_cubit.dart';
-import 'package:couzinty/features/home/presentation/viewmodel/suggestion_recipes/suggestion_recipes_cubit.dart';
-import 'package:couzinty/features/home/presentation/viewmodel/suggestion_recipes/suggestion_recipes_state.dart';
 import 'package:couzinty/features/home/presentation/views/widgets/custom_text_form_field.dart';
 import 'package:couzinty/features/home/presentation/views/widgets/home_custom_slider.dart';
 import 'package:couzinty/features/home/presentation/views/widgets/custom_grid.dart';
@@ -105,8 +105,8 @@ class _HomeViewState extends State<HomeView> {
                       ),
                     ),
                     SizedBox(height: SizeConfig.defaultSize! * 2),
-                    const Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 10),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 10),
                       child: CustomGrid(),
                     ),
                   ],

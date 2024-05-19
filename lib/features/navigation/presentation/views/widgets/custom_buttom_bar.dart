@@ -14,10 +14,8 @@ class CustomButtomBar extends StatefulWidget {
 
 class _CustomButtomBarState extends State<CustomButtomBar> {
   void navigateToPage(int index) {
-    widget.pageController.animateToPage(
+    widget.pageController.jumpToPage(
       index,
-      duration: const Duration(milliseconds: 300),
-      curve: Curves.easeInOut,
     );
   }
 

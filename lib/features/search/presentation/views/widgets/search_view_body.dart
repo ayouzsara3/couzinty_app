@@ -1,9 +1,10 @@
 import 'package:couzinty/core/utils/constants.dart';
 import 'package:couzinty/core/utils/widgets/custom_loading_indicator.dart';
 import 'package:couzinty/features/categories/presentation/views/widgets/recipe_card.dart';
-import 'package:couzinty/features/home/presentation/viewmodel/suggestion_recipes/suggestion_recipes_cubit.dart';
+import 'package:couzinty/features/home/presentation/viewmodel/suggestion_recipes_cubit.dart/suggestion_recipes_cubit.dart';
 import 'package:couzinty/features/home/presentation/views/widgets/custom_text_form_field.dart';
 import 'package:couzinty/features/search/presentation/viewmodel/cubit/search_cubit.dart';
+import 'package:couzinty/features/search/presentation/views/widgets/custom_filter.dart';
 import 'package:couzinty/features/upload/data/models/recipe_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -17,7 +18,20 @@ class SearchViewBody extends StatefulWidget {
 
 class _SearchViewBodyState extends State<SearchViewBody> {
   TextEditingController searchController = TextEditingController();
-  static List previousSearches = [];
+  bool isSearchByIngredient = false;
+
+  String? selectedCategory;
+  double? selectedCookingTime;
+  String? selectedDifficulty;
+
+  void setFilter(category, cookingTime, difficulty) {
+    selectedCategory = category;
+    selectedCookingTime = cookingTime;
+    selectedDifficulty = difficulty;
+
+    print(
+        'category1: $category , cookingTime1: $cookingTime , difficult1: $difficulty');
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -30,32 +44,106 @@ class _SearchViewBodyState extends State<SearchViewBody> {
           Container(
             color: Colors.white,
             child: Padding(
-              padding: const EdgeInsets.all(20),
-              child: Row(
+              padding: const EdgeInsets.all(10),
+              child: Column(
                 children: [
-                  IconButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                      icon: const Icon(
-                        Icons.arrow_back_ios,
-                        color: kMainGreen,
-                      )),
-                  Expanded(
-                    child: CustomTextFormField(
-                      hint: "Recherche",
-                      prefixIcon: Icons.search,
-                      controller: searchController,
-                      filled: true,
-                      suffixIcon: searchController.text.isEmpty
-                          ? null
-                          : Icons.cancel_sharp,
-                      onTapSuffixIcon: () {
-                        searchController.clear();
-                      },
-                      onChanged: (query) {
-                        context.read<SearchCubit>().search(query);
-                      },
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      IconButton(
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          icon: const Icon(
+                            Icons.arrow_back_ios,
+                            color: kMainGreen,
+                          )),
+                      Expanded(
+                        child: Column(
+                          children: [
+                            CustomTextFormField(
+                              hint: "Recherche",
+                              prefixIcon: Icons.search,
+                              controller: searchController,
+                              filled: true,
+                              suffixIcon: searchController.text.isEmpty
+                                  ? null
+                                  : Icons.cancel_sharp,
+                              onTapSuffixIcon: () {
+                                searchController.clear();
+                                context.read<SearchCubit>().search(
+                                      searchController.text,
+                                      isSearchByIngredient,
+                                      category: selectedCategory,
+                                      cookingTime: selectedCookingTime,
+                                      difficulty: selectedDifficulty,
+                                    );
+                              },
+                              onChanged: (query) {
+                                setState(() {
+                                  context.read<SearchCubit>().search(
+                                        searchController.text,
+                                        isSearchByIngredient,
+                                        category: selectedCategory,
+                                        cookingTime: selectedCookingTime,
+                                        difficulty: selectedDifficulty,
+                                      );
+                                });
+                              },
+                            ),
+                          ],
+                        ),
+                      ),
+                      IconButton(
+                          onPressed: () {
+                            setState(() {
+                              showModalBottomSheet(
+                                  shape: const RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.vertical(
+                                      top: Radius.circular(25),
+                                    ),
+                                  ),
+                                  clipBehavior: Clip.antiAliasWithSaveLayer,
+                                  context: context,
+                                  builder: (context) => CustomFilter(
+                                        onChoosenFilter: setFilter,
+                                      ));
+                            });
+                          },
+                          icon: const Icon(
+                            Icons.filter_alt_rounded,
+                            color: kMainGreen,
+                            size: 26,
+                          )),
+                    ],
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 36),
+                    child: Row(
+                      children: [
+                        Checkbox(
+                          value: isSearchByIngredient,
+                          onChanged: (value) {
+                            setState(() {
+                              isSearchByIngredient = value!;
+                              if (searchController.text.isNotEmpty) {
+                                context.read<SearchCubit>().search(
+                                      searchController.text,
+                                      isSearchByIngredient,
+                                      category: selectedCategory,
+                                      cookingTime: selectedCookingTime,
+                                      difficulty: selectedDifficulty,
+                                    );
+                              }
+                            });
+                          },
+                          activeColor: kMainGreen,
+                        ),
+                        const Text(
+                          'Ingredients',
+                          textAlign: TextAlign.center,
+                        ),
+                      ],
                     ),
                   ),
                 ],
@@ -103,8 +191,6 @@ class _SearchViewBodyState extends State<SearchViewBody> {
 }
 
 Widget _buildSearchResults(List<RecipeModel> recipes) {
-  // Build UI for displaying search results
-  // Example:
   return ListView.builder(
     itemCount: recipes.length,
     itemBuilder: (context, index) {

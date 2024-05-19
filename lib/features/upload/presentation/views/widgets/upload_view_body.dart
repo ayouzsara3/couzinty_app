@@ -138,10 +138,28 @@ class _UploadViewBodyState extends State<UploadViewBody> {
                       const SizedBox(
                         height: 20,
                       ),
+                      Text(
+                        "Difficulté de cuisson",
+                        style: AppStyles.styleBold17(context),
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
                       CustomDifficultySlider(
                         onSave: (value) {
                           selectedDifficulty = value;
                         },
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      Row(
+                        children: [
+                          Text("Durée de cuisson",
+                              style: AppStyles.styleBold17(context)),
+                          Text("( en minutes )",
+                              style: AppStyles.styleMedium17(context)),
+                        ],
                       ),
                       const SizedBox(
                         height: 20,
