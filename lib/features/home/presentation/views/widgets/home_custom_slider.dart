@@ -3,7 +3,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:couzinty/core/utils/size_config.dart';
 import 'package:couzinty/core/utils/widgets/custom_loading_indicator.dart';
 import 'package:couzinty/features/categories/presentation/views/recipe_details_view.dart';
-import 'package:couzinty/features/home/presentation/viewmodel/fetch_slider_recipes_cubit/fetch_slider_recipes_cubit.dart';
+import 'package:couzinty/features/home/presentation/suggestion_recipes_cubit/fetch_slider_recipes_cubit/fetch_slider_recipes_cubit.dart';
 import 'package:couzinty/features/upload/data/models/recipe_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

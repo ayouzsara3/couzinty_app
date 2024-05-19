@@ -53,17 +53,21 @@ class IngredientCard extends StatelessWidget {
                   color: Colors.white,
                 ),
               ),
-              Text(
-                ingredientName,
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                  decoration: ingredientCompleted
-                      ? TextDecoration.lineThrough
-                      : TextDecoration.none,
-                  decorationColor: Colors.white,
-                  decorationThickness: 2,
+              Expanded(
+                child: Text(
+                  ingredientName,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    decoration: ingredientCompleted
+                        ? TextDecoration.lineThrough
+                        : TextDecoration.none,
+                    decorationColor: Colors.white,
+                    decorationThickness: 2,
+                  ),
                 ),
               ),
             ],

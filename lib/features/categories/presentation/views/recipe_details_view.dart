@@ -469,9 +469,13 @@ class _RecipeDetailsViewState extends State<RecipeDetailsView> {
           const SizedBox(
             width: 10,
           ),
-          Text(
-            ingredient,
-            style: Theme.of(context).textTheme.bodyMedium,
+          Expanded(
+            child: Text(
+              ingredient,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+              style: Theme.of(context).textTheme.bodyMedium,
+            ),
           ),
         ],
       ),

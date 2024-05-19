@@ -1,6 +1,6 @@
 import 'package:couzinty/core/utils/widgets/custom_loading_indicator.dart';
-import 'package:couzinty/features/home/presentation/viewmodel/suggestion_recipes_cubit.dart/suggestion_recipes_cubit.dart';
-import 'package:couzinty/features/home/presentation/viewmodel/suggestion_recipes_cubit.dart/suggestion_recipes_state.dart';
+import 'package:couzinty/features/home/presentation/suggestion_recipes_cubit/cubit/suggestion_recipes_cubit.dart';
+import 'package:couzinty/features/home/presentation/suggestion_recipes_cubit/cubit/suggestion_recipes_state.dart';
 import 'package:couzinty/features/home/presentation/views/widgets/suggest_recipe_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -25,7 +25,7 @@ class CustomGrid extends StatelessWidget {
               crossAxisSpacing: 32,
               mainAxisSpacing: 10,
             ),
-            itemCount: 4,
+            itemCount: state.recipes.length < 4 ? state.recipes.length : 4,
             itemBuilder: (context, index) {
               return SuggestRecipeCard(recipe: state.recipes[index]);
             },

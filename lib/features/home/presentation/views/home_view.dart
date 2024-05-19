@@ -1,8 +1,8 @@
 import 'package:couzinty/core/utils/app_styles.dart';
 import 'package:couzinty/core/utils/size_config.dart';
-import 'package:couzinty/features/home/presentation/viewmodel/suggestion_recipes_cubit.dart/suggestion_recipes_cubit.dart';
-import 'package:couzinty/features/home/presentation/viewmodel/suggestion_recipes_cubit.dart/suggestion_recipes_state.dart';
-import 'package:couzinty/features/home/presentation/viewmodel/fetch_slider_recipes_cubit/fetch_slider_recipes_cubit.dart';
+import 'package:couzinty/features/home/presentation/suggestion_recipes_cubit/cubit/suggestion_recipes_cubit.dart';
+import 'package:couzinty/features/home/presentation/suggestion_recipes_cubit/cubit/suggestion_recipes_state.dart';
+import 'package:couzinty/features/home/presentation/suggestion_recipes_cubit/fetch_slider_recipes_cubit/fetch_slider_recipes_cubit.dart';
 import 'package:couzinty/features/home/presentation/views/widgets/custom_text_form_field.dart';
 import 'package:couzinty/features/home/presentation/views/widgets/home_custom_slider.dart';
 import 'package:couzinty/features/home/presentation/views/widgets/custom_grid.dart';
@@ -93,20 +93,12 @@ class _HomeViewState extends State<HomeView> {
                             style: AppStyles.styleBold17(context).copyWith(
                                 color: const Color.fromARGB(174, 0, 0, 0)),
                           ),
-                          InkWell(
-                            onTap: () {},
-                            child: Text(
-                              'Voir tout',
-                              style: AppStyles.styleMedium15(context)
-                                  .copyWith(color: Colors.black54),
-                            ),
-                          )
                         ],
                       ),
                     ),
                     SizedBox(height: SizeConfig.defaultSize! * 2),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 10),
+                    const Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 10),
                       child: CustomGrid(),
                     ),
                   ],

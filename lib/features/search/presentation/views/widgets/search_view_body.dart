@@ -1,7 +1,7 @@
 import 'package:couzinty/core/utils/constants.dart';
 import 'package:couzinty/core/utils/widgets/custom_loading_indicator.dart';
 import 'package:couzinty/features/categories/presentation/views/widgets/recipe_card.dart';
-import 'package:couzinty/features/home/presentation/viewmodel/suggestion_recipes_cubit.dart/suggestion_recipes_cubit.dart';
+import 'package:couzinty/features/home/presentation/suggestion_recipes_cubit/cubit/suggestion_recipes_cubit.dart';
 import 'package:couzinty/features/home/presentation/views/widgets/custom_text_form_field.dart';
 import 'package:couzinty/features/search/presentation/viewmodel/cubit/search_cubit.dart';
 import 'package:couzinty/features/search/presentation/views/widgets/custom_filter.dart';

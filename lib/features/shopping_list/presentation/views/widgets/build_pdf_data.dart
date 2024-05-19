@@ -34,8 +34,10 @@ buildPdfData(List<List<dynamic>> shoppingList, pw.Font font) =>
                 ),
                 child: pw.Row(
                   children: [
-                    pw.Text(
+                    pw.Expanded(
+                        child: pw.Text(
                       shoppingList[index][0],
+                      maxLines: 2,
                       style: pw.TextStyle(
                         color: const PdfColor.fromInt(0xffffffff),
                         fontSize: 18,
@@ -43,7 +45,7 @@ buildPdfData(List<List<dynamic>> shoppingList, pw.Font font) =>
                         decorationThickness: 2,
                         font: font,
                       ),
-                    ),
+                    )),
                   ],
                 ),
               ),

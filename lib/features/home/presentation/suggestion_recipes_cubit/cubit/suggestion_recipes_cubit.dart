@@ -1,6 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:couzinty/features/home/data/repos/home_repo.dart';
-import 'package:couzinty/features/home/presentation/viewmodel/suggestion_recipes_cubit.dart/suggestion_recipes_state.dart';
+import 'package:couzinty/features/home/presentation/suggestion_recipes_cubit/cubit/suggestion_recipes_state.dart';
 import 'package:couzinty/features/upload/data/models/recipe_model.dart';
 
 class SuggestionRecipesCubit extends Cubit<SuggestionRecipesState> {
