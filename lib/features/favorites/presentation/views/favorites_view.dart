@@ -17,7 +17,6 @@ class _FavoritesViewState extends State<FavoritesView> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     recipesIds = context.read<UserCubit>().state.favorites;
     context.read<FetchFavoriteRecipesCubit>().fetchFavoriteRecips(recipesIds);

@@ -10,19 +10,21 @@ class SigninCubit extends Cubit<SigninState> {
 
   Future<void> login(String email, String password) async {
     emit(SigninLoading());
-    try {
-      final user = await authRepo.firebaseSignIn(email, password);
-      // Update shared preferences when user signs in
-      await _updateSharedPreferences(true);
 
-      emit(SigninSuccess(user: user!));
-    } catch (e) {
-      emit(SigninError("Login failed: $e"));
-    }
+    final user = await authRepo.firebaseSignIn(email, password);
+    user.fold((failure) {
+      emit(SigninError(failure));
+    }, (user) {
+      emit(SigninSuccess(user: user));
+    });
   }
 
   Future<void> logout() async {
     await _updateSharedPreferences(false);
+    emit(SigninInitial());
+  }
+
+  void resetState() {
     emit(SigninInitial());
   }
 

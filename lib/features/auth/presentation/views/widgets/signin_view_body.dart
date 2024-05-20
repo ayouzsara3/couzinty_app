@@ -13,6 +13,7 @@ import 'package:couzinty/features/recipes_review/presentation/views/recipes_revi
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_loadingindicator/flutter_loadingindicator.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 
@@ -24,7 +25,6 @@ class SignInViewBody extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<SignInViewBody> {
-  final _isAuthenticating = false;
   var _entredEmail = '';
   var _entredPassword = '';
 
@@ -58,9 +58,9 @@ class _LoginScreenState extends State<SignInViewBody> {
       } else if (state is SigninLoading) {
         return const Center(child: CustomLoadingIncicator());
       } else {
-        String? errorMessage;
         if (state is SigninError) {
-          errorMessage = state.errorMessage;
+          EasyLoading.showError(state.errorMessage);
+          context.read<SigninCubit>().resetState();
         }
 
         return SizedBox(
@@ -72,7 +72,6 @@ class _LoginScreenState extends State<SignInViewBody> {
                 SvgPicture.asset(
                   'assets/images/logo.svg',
                 ),
-                if (errorMessage != null) Text(errorMessage),
                 Form(
                   key: _formKey,
                   child: Column(
@@ -158,7 +157,6 @@ class _LoginScreenState extends State<SignInViewBody> {
                   fontSize: 16,
                   borderRadius: 32,
                   backgroundColor: kMainGreen,
-                  isLoading: _isAuthenticating,
                 ),
                 SizedBox(height: SizeConfig.defaultSize! * 2.5),
                 InkWell(
