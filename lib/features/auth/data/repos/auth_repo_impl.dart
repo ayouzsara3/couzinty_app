@@ -3,6 +3,7 @@ import 'package:couzinty/features/auth/data/repos/auth_repo.dart';
 import 'package:couzinty/features/auth/data/services/firestore_services.dart';
 import 'package:dartz/dartz.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 
 class AuthRepoImpl implements AuthRepo {
   final FirebaseAuth _firebaseAuth;
@@ -11,7 +12,7 @@ class AuthRepoImpl implements AuthRepo {
   AuthRepoImpl(this._firebaseAuth, this._firestoreService);
 
   @override
-  Future<void> firebaseSignUp(
+  Future<Either<String, Unit>> firebaseSignUp(
       String userName, String email, String password) async {
     try {
       final userCredentials =
@@ -23,8 +24,13 @@ class AuthRepoImpl implements AuthRepo {
       // save userData on firestore
       await _firestoreService.saveUserData(
           userCredentials.user!.uid, userName, email, 'user');
-    } catch (e) {
-      return;
+
+      return right(unit);
+    } on FirebaseAuthException catch (error) {
+      if (error.code == 'email-already-in-use') {
+        return left('cet adresse mail est déjà utilisée');
+      }
+      return left('Authentification échouée');
     }
   }
 

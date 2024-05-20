@@ -11,12 +11,19 @@ class SignupCubit extends Cubit<SignupState> {
   Future<void> signup(String email, String password, String userName) async {
     emit(SignupLoading());
 
-    try {
-      await authRepo.firebaseSignUp(userName, email, password);
+    final result = await authRepo.firebaseSignUp(userName, email, password);
 
-      emit(SignupSuccess());
-    } catch (e) {
-      emit(SignupError("Signup failed: $e"));
-    }
+    result.fold(
+      (error) {
+        emit(SignupError(error));
+      },
+      (r) {
+        emit(SignupSuccess());
+      },
+    );
+  }
+
+  void resetState() {
+    emit(SignupInitial());
   }
 }
