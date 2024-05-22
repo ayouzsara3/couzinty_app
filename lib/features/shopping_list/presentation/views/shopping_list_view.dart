@@ -77,7 +77,6 @@ class _ShoppingListViewState extends State<ShoppingListView> {
                                     .read<UserCubit>()
                                     .state
                                     .shoppingList!;
-                                print(ingredients);
                                 if (ingredients.isNotEmpty) {
                                   QuickAlert.show(
                                     context: context,
@@ -102,6 +101,8 @@ class _ShoppingListViewState extends State<ShoppingListView> {
                                           .state
                                           .shoppingList = [];
 
+                                      ingredientsList.clear();
+
                                       Navigator.of(context).pop();
                                     },
                                   );
@@ -124,7 +125,7 @@ class _ShoppingListViewState extends State<ShoppingListView> {
                             ),
                             PopupMenuItem(
                               onTap: () async {
-                                if (ingredients.isNotEmpty) {
+                                if (ingredientsList.isNotEmpty) {
                                   await sharePressed(context);
                                 }
                               },

@@ -12,9 +12,10 @@ class SigninCubit extends Cubit<SigninState> {
     emit(SigninLoading());
 
     final user = await authRepo.firebaseSignIn(email, password);
-    user.fold((failure) {
+    user.fold((failure) async {
       emit(SigninError(failure));
-    }, (user) {
+    }, (user) async {
+      await _updateSharedPreferences(true);
       emit(SigninSuccess(user: user));
     });
   }
